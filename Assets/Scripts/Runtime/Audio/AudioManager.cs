@@ -53,6 +53,7 @@ namespace SuperOttie.Audio
 
         public void Play(Sfx sfx)
         {
+            if (Haptics.TryGetStrength(sfx, out var strength)) Haptics.Play(strength);
             if (_pool == null || !_clips.TryGetValue(sfx, out var entry)) return;
             // Identical sounds fired in the same instant just get louder and clip; drop the duplicates.
             float now = Time.unscaledTime;

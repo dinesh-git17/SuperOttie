@@ -42,6 +42,7 @@ namespace SuperOttie.Player
         BoxCollider2D _box;
         InputFrame _frame;
         float _lastCommandedVy;
+        float _airFallSpeed;
         bool _wasGrounded;
 
         public PlatformerMotor Motor { get; private set; }
@@ -118,15 +119,21 @@ namespace SuperOttie.Player
             if (IsGrounded)
             {
                 _stompChain.Reset();
-                if (!_wasGrounded) _visual.OnLand();
+                if (!_wasGrounded)
+                {
+                    _visual.OnLand();
+                    if (_airFallSpeed > 8f) Effects.Dust(transform.position, _ctx.Root, 4, 0.8f + _airFallSpeed * 0.03f);
+                }
             }
             _wasGrounded = IsGrounded;
+            _airFallSpeed = IsGrounded ? 0f : Mathf.Max(_airFallSpeed, -Motor.Velocity.y);
 
             var step = Motor.Step(_frame.Move, _frame.JumpHeld, IsGrounded, dt);
             if (step.Jumped)
             {
                 _ctx.Audio.Play(IsBig ? Sfx.JumpBig : Sfx.Jump);
                 _visual.OnJump();
+                Effects.Dust(transform.position, _ctx.Root, 2, 0.6f);
                 IsGrounded = false;
             }
             _rb.linearVelocity = Motor.Velocity;
@@ -216,6 +223,7 @@ namespace SuperOttie.Player
                     _ctx.RaisePopup(popupAt, reward.Points.ToString());
                 }
                 _ctx.Audio.Play(Sfx.Stomp);
+                Effects.Dust(enemy.transform.position + Vector3.up * 0.3f, _ctx.Root, 6, 1.4f);
                 Motor.Bounce(_frame.JumpHeld);
                 _rb.linearVelocity = Motor.Velocity;
                 _lastCommandedVy = Motor.Velocity.y;
