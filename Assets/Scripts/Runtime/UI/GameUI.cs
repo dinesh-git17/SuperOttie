@@ -151,13 +151,19 @@ namespace SuperOttie.UI
             _introLives.text = $"x {lives}";
         }
 
+        (int lives, int coins, int score, int time, int level) _hudShown = (-1, -1, -1, -1, -1);
+
+        /// <summary>Updates HUD labels, formatting strings only when a value actually changed (no per-frame garbage).</summary>
         public void SetHud(GameSession session, int time, int levelNumber)
         {
-            _lives.text = $"x{session.Lives}";
-            _coins.text = $"x{session.Coins:00}";
-            _score.text = session.Score.ToString("000000");
-            _world.text = $"1-{levelNumber}";
-            _time.text = time.ToString("000");
+            var now = (session.Lives, session.Coins, session.Score, time, levelNumber);
+            if (now == _hudShown) return;
+            if (now.Lives != _hudShown.lives) _lives.text = $"x{now.Lives}";
+            if (now.Coins != _hudShown.coins) _coins.text = $"x{now.Coins:00}";
+            if (now.Score != _hudShown.score) _score.text = now.Score.ToString("000000");
+            if (now.time != _hudShown.time) _time.text = now.time.ToString("000");
+            if (now.levelNumber != _hudShown.level) _world.text = $"1-{now.levelNumber}";
+            _hudShown = now;
         }
 
         public void SetGameOver(int score) => _gameOverScore.text = $"Score {score:000000}";
