@@ -31,12 +31,13 @@ namespace SuperOttie.Editor
 
             ti.textureType = TextureImporterType.Sprite;
             ti.spriteImportMode = SpriteImportMode.Single;
-            ti.textureCompression = TextureImporterCompression.CompressedHQ;
+            // Uncompressed: crisp cartoon edges, and the iOS Simulator GPU can't sample ASTC anyway.
+            ti.textureCompression = TextureImporterCompression.Uncompressed;
 
             var settings = new TextureImporterSettings();
             ti.ReadTextureSettings(settings);
             settings.spriteMeshType = SpriteMeshType.FullRect; // required for tiled draw mode
-            settings.spriteGenerateFallbackPhysicsShape = false;
+            settings.spriteGenerateFallbackPhysicsShape = true; // generated at import; avoids runtime outline reads
             settings.spriteAlignment = (int)(UsesFeetPivot(assetPath) ? SpriteAlignment.BottomCenter : SpriteAlignment.Center);
             settings.spritePixelsPerUnit = assetPath.Contains("/Sprites/") ? SpritePixelsPerUnit : 100;
             ti.SetTextureSettings(settings);

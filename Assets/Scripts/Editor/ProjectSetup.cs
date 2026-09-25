@@ -39,6 +39,7 @@ namespace SuperOttie.Editor
             Problems.Clear();
             ConfigureLayers();
             ConfigurePlayerSettings();
+            ConfigureRenderer();
             AssetDatabase.ImportAsset(Art.TrimEnd('/'), ImportAssetOptions.ImportRecursive | ImportAssetOptions.ForceUpdate);
             AssetDatabase.ImportAsset(Audio.TrimEnd('/'), ImportAssetOptions.ImportRecursive | ImportAssetOptions.ForceUpdate);
             var panel = CreatePanelSettings();
@@ -102,6 +103,28 @@ namespace SuperOttie.Editor
             var icon = AssetDatabase.LoadAssetAtPath<Texture2D>(Art + "AppIcon/app_icon.png");
             if (icon != null) PlayerSettings.SetIcons(NamedBuildTarget.Unknown, new[] { icon }, IconKind.Any);
             else Problems.Add("App icon missing: Assets/Art/AppIcon/app_icon.png");
+        }
+
+        /// <summary>
+        /// The game uses no post-processing. Dropping the renderer's post-process data keeps URP from
+        /// loading Bloom/DoF shaders the iOS Simulator GPU can't run (it logs errors every frame).
+        /// </summary>
+        static void ConfigureRenderer()
+        {
+            const string rendererPath = "Assets/Settings/Renderer2D.asset";
+            var renderer = AssetDatabase.LoadMainAssetAtPath(rendererPath);
+            if (renderer == null)
+            {
+                Problems.Add("Missing " + rendererPath);
+                return;
+            }
+            var so = new SerializedObject(renderer);
+            var post = so.FindProperty("m_PostProcessData");
+            if (post != null)
+            {
+                post.objectReferenceValue = null;
+                so.ApplyModifiedPropertiesWithoutUndo();
+            }
         }
 
         // ------------------------------------------------------------------ assets

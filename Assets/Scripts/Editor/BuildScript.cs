@@ -27,6 +27,7 @@ namespace SuperOttie.Editor
             {
                 ProjectSetup.Run();
                 PlayerSettings.iOS.sdkVersion = sdk;
+                EditorUserBuildSettings.development = false;
                 var options = new BuildPlayerOptions
                 {
                     scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
