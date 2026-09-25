@@ -35,6 +35,8 @@ namespace SuperOttie.UI
         readonly List<Label> _blinking = new List<Label>();
         readonly List<(VisualElement element, Screen screen, Action action)> _taps = new List<(VisualElement, Screen, Action)>();
         readonly TouchZones _zones;
+        readonly List<(Label label, float age)> _popups = new List<(Label, float)>();
+        const float PopupLifetime = 0.9f;
 
         Rect _appliedSafeArea;
         float _blinkTime;
@@ -133,7 +135,11 @@ namespace SuperOttie.UI
             SetVisible(_pause, screen == Screen.Paused);
             SetVisible(_gameOver, screen == Screen.GameOver);
             SetVisible(_victory, screen == Screen.Victory);
-            if (!gameplay) HideBanner();
+            if (!gameplay)
+            {
+                HideBanner();
+                ClearPopups();
+            }
         }
 
         public void SetTitle(int bestScore) => _titleBest.text = $"Best {bestScore:000000}";
@@ -177,6 +183,44 @@ namespace SuperOttie.UI
             SetVisible(_banner, false);
         }
 
+        /// <summary>Floating score text that rises and fades above a world position.</summary>
+        public void ShowPopup(Vector3 worldPosition, string text, Camera camera)
+        {
+            if (_root.panel == null || camera == null) return;
+            var p = RuntimePanelUtils.CameraTransformWorldToPanel(_root.panel, worldPosition, camera);
+            var label = new Label(text) { pickingMode = PickingMode.Ignore };
+            label.AddToClassList("popup");
+            label.style.left = p.x;
+            label.style.top = p.y;
+            _root.Add(label);
+            _popups.Add((label, 0f));
+        }
+
+        void TickPopups(float dt)
+        {
+            for (int i = _popups.Count - 1; i >= 0; i--)
+            {
+                var (label, age) = _popups[i];
+                age += dt;
+                if (age >= PopupLifetime)
+                {
+                    label.RemoveFromHierarchy();
+                    _popups.RemoveAt(i);
+                    continue;
+                }
+                _popups[i] = (label, age);
+                float k = age / PopupLifetime;
+                label.style.translate = new Translate(Length.Percent(-50), -90f * k);
+                label.style.opacity = 1f - k * k;
+            }
+        }
+
+        public void ClearPopups()
+        {
+            foreach (var (label, _) in _popups) label.RemoveFromHierarchy();
+            _popups.Clear();
+        }
+
         /// <summary>0 = clear, 1 = black. Animated in <see cref="Tick"/>.</summary>
         public void FadeTo(float value) => _fadeTarget = Mathf.Clamp01(value);
 
@@ -208,6 +252,7 @@ namespace SuperOttie.UI
                 if (_bannerTime <= 0f) HideBanner();
             }
 
+            TickPopups(unscaledDt);
             _fadeValue = Mathf.MoveTowards(_fadeValue, _fadeTarget, unscaledDt * 3f);
             _fade.style.opacity = _fadeValue;
         }

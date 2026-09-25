@@ -56,6 +56,7 @@ namespace SuperOttie.Entities
             b.KillY = Ctx.KillY;
             Ctx.Session.AddScore(100);
             Ctx.Audio.Play(Sfx.Kick);
+            Ctx.RaisePopup(transform.position + Vector3.up, "100");
         }
     }
 

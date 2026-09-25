@@ -203,12 +203,18 @@ namespace SuperOttie.Player
             {
                 enemy.Stomp();
                 var reward = _stompChain.Next();
+                var popupAt = enemy.transform.position + Vector3.up;
                 if (reward.ExtraLife)
                 {
                     _ctx.Session.AddLife();
                     _ctx.Audio.Play(Sfx.OneUp);
+                    _ctx.RaisePopup(popupAt, "1UP");
                 }
-                else _ctx.Session.AddScore(reward.Points);
+                else
+                {
+                    _ctx.Session.AddScore(reward.Points);
+                    _ctx.RaisePopup(popupAt, reward.Points.ToString());
+                }
                 _ctx.Audio.Play(Sfx.Stomp);
                 Motor.Bounce(_frame.JumpHeld);
                 _rb.linearVelocity = Motor.Velocity;
@@ -236,6 +242,7 @@ namespace SuperOttie.Player
         {
             _ctx.Session.AddScore(1000);
             _ctx.Audio.Play(Sfx.PowerUp);
+            _ctx.RaisePopup(transform.position + Vector3.up * 1.6f, "1000");
             if (!IsBig) SetBig(true);
         }
 

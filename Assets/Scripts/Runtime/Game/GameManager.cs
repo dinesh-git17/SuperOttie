@@ -170,6 +170,7 @@ namespace SuperOttie.Game
             _ctx.GoalReached += OnGoalReached;
             _ctx.PlayerFinishedGoal += OnPlayerFinishedGoal;
             _ctx.CheckpointReached += () => _checkpointReached = true;
+            _ctx.Popup += (pos, text) => _ui.ShowPopup(pos, text, gameCamera.Camera);
             _input.ResetEdges();
             _level = LevelBuilder.Build(_ctx, _input, fromCheckpoint: fromCheckpoint);
             gameCamera.Follow(_level.Player.transform, _level.CameraBounds);

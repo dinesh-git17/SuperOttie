@@ -36,10 +36,14 @@ namespace SuperOttie.Level
         public event Action PlayerFinishedGoal;
         public event Action CheckpointReached;
 
+        /// <summary>Floating feedback text ("100", "1UP") at a world position.</summary>
+        public event Action<Vector3, string> Popup;
+
         public void RaisePlayerDied() => PlayerDied?.Invoke();
         public void RaiseGoalReached(int flagScore) => GoalReached?.Invoke(flagScore);
         public void RaisePlayerFinishedGoal() => PlayerFinishedGoal?.Invoke();
         public void RaiseCheckpointReached() => CheckpointReached?.Invoke();
+        public void RaisePopup(Vector3 worldPosition, string text) => Popup?.Invoke(worldPosition, text);
 
         /// <summary>World-space right edge of what the camera shows (enemies wake up just beyond it).</summary>
         public float CameraRightEdge

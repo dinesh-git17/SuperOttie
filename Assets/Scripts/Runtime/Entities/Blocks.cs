@@ -66,6 +66,8 @@ namespace SuperOttie.Entities
 
     public sealed class QuestionBlock : BlockBase
     {
+        static readonly string CoinScoreText = Core.GameSession.CoinScore.ToString();
+
         public enum Content
         {
             Coin,
@@ -92,6 +94,7 @@ namespace SuperOttie.Entities
                 Ctx.Session.AddCoin();
                 Ctx.Audio.Play(Sfx.Coin);
                 Effects.CoinPop(Ctx.Assets.coin, transform.position, Ctx.Root);
+                Ctx.RaisePopup(transform.position + Vector3.up * 1.8f, CoinScoreText);
             }
             else
             {

@@ -97,6 +97,8 @@ namespace SuperOttie.Editor
             PlayerSettings.iOS.targetDevice = iOSTargetDevice.iPhoneAndiPad;
             PlayerSettings.iOS.simulatorSdkArchitecture = AppleMobileArchitectureSimulator.ARM64;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.iOS, ScriptingImplementation.IL2CPP);
+            PlayerSettings.iOS.appleEnableAutomaticSigning = true;
+            PlayerSettings.iOS.appleDeveloperTeamID = "WWDLQL8W8W"; // for device builds; the simulator needs no signing
             PlayerSettings.SplashScreen.show = false;
             PlayerSettings.runInBackground = false;
 

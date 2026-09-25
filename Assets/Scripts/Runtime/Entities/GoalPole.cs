@@ -42,6 +42,7 @@ namespace SuperOttie.Entities
             _reached = true;
             int score = ScoreForHeight(player.transform.position.y - BaseY);
             _ctx.Session.AddScore(score);
+            _ctx.RaisePopup(player.transform.position + Vector3.up * 1.5f, score.ToString());
             _ctx.RaiseGoalReached(score);
             player.BeginGoal(this);
             StartCoroutine(LowerFlag());
