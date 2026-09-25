@@ -24,6 +24,7 @@ namespace SuperOttie.Level
         Flowers,
         Reeds,
         Sign,
+        Checkpoint,
     }
 
     public readonly struct Spawn
@@ -51,7 +52,7 @@ namespace SuperOttie.Level
     {
         readonly TileKind[,] _tiles;
 
-        public LevelData(string name, string theme, int timeLimit, TileKind[,] tiles, List<Spawn> spawns, Vector2Int playerStart, Vector2Int flagCell)
+        public LevelData(string name, string theme, int timeLimit, TileKind[,] tiles, List<Spawn> spawns, Vector2Int playerStart, Vector2Int flagCell, Vector2Int? checkpoint = null)
         {
             Name = name;
             Theme = theme;
@@ -60,6 +61,7 @@ namespace SuperOttie.Level
             Spawns = spawns;
             PlayerStart = playerStart;
             FlagCell = flagCell;
+            Checkpoint = checkpoint;
         }
 
         public string Name { get; }
@@ -70,6 +72,9 @@ namespace SuperOttie.Level
         public IReadOnlyList<Spawn> Spawns { get; }
         public Vector2Int PlayerStart { get; }
         public Vector2Int FlagCell { get; }
+
+        /// <summary>Optional mid-level restart point ('K').</summary>
+        public Vector2Int? Checkpoint { get; }
 
         public TileKind GetTile(int x, int y) =>
             x < 0 || y < 0 || x >= Width || y >= Height ? TileKind.Empty : _tiles[x, y];

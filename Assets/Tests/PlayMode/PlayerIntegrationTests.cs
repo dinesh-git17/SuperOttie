@@ -62,12 +62,14 @@ namespace SuperOttie.Tests
             Time.timeScale = 1f;
         }
 
-        IEnumerator Load(params string[] rows)
+        IEnumerator Load(params string[] rows) => LoadFrom(false, rows);
+
+        IEnumerator LoadFrom(bool fromCheckpoint, params string[] rows)
         {
             var data = LevelParser.Parse("---\n" + string.Join("\n", rows) + "\n");
             _ctx = new LevelContext(data, GameAssets.Load(), _session, new NullAudio(), _camera.Camera);
             _ctx.PlayerDied += () => _died = true;
-            _level = LevelBuilder.Build(_ctx, _input, withBackground: false);
+            _level = LevelBuilder.Build(_ctx, _input, withBackground: false, fromCheckpoint: fromCheckpoint);
             _camera.Follow(_level.Player.transform, _level.CameraBounds);
             yield return new WaitForFixedUpdate();
         }
@@ -332,6 +334,34 @@ namespace SuperOttie.Tests
             yield return Seconds(1.2f);
             Assert.That(_session.Coins, Is.EqualTo(3));
             Assert.That(Object.FindFirstObjectByType<Coin>(), Is.Null);
+        }
+
+        [UnityTest]
+        public IEnumerator PassingCheckpoint_RaisesEvent()
+        {
+            yield return Load(
+                "..............",
+                "P.....K......F",
+                "##############",
+                "##############");
+            bool reached = false;
+            _ctx.CheckpointReached += () => reached = true;
+            _input.Move = 1f;
+            yield return Seconds(1.2f);
+            Assert.That(reached, Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator Respawn_StartsAtCheckpoint()
+        {
+            yield return LoadFrom(true,
+                "..............",
+                "P.......K....F",
+                "##############",
+                "##############");
+            yield return Seconds(0.3f);
+            Assert.That(Player.transform.position.x, Is.EqualTo(8.5f).Within(0.05f));
+            Assert.That(Player.IsGrounded, Is.True);
         }
 
         [UnityTest]

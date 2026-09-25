@@ -1,0 +1,6 @@
+Image: six separate game objects for a platformer, arranged in a 3 columns x 2 rows grid with big white gaps between them, all drawn flat and front-facing.
+Row 1: (1) a shiny round gold coin with a small embossed seashell emblem, front view; (2) a cute glowing golden fish power-up with big eyes, side view facing right; (3) a perfectly square golden-yellow mystery block with four small rivets in the corners and a big white question mark symbol in the middle.
+Row 2: (4) the same square block after being used: plain dull brown, with the four rivets, no symbol; (5) a perfectly square orange-brown brick block made of stacked bricks with mortar lines; (6) a perfectly square grey beveled stone block.
+The four blocks are exact squares seen straight on (no perspective, no 3D side faces), each the same size.
+Style: polished 2D side-scrolling platformer game art, cute chunky cartoon in the spirit of a modern Nintendo 2D Mario game, bold clean dark-brown outlines, soft cel shading with 2-3 tones, bright saturated colors. No text, no letters, no numbers, no watermark, no signature.
+Background: pure flat white (#FFFFFF) everywhere around the objects, no ground, no cast shadows, no floor line, no frames, no borders, no grid lines.

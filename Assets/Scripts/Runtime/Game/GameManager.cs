@@ -49,6 +49,7 @@ namespace SuperOttie.Game
         LevelContext _ctx;
         BuiltLevel _level;
         Coroutine _flow;
+        bool _checkpointReached;
 
         public Phase Current { get; private set; } = Phase.Boot;
         public GameSession Session => _session;
@@ -142,7 +143,7 @@ namespace SuperOttie.Game
             audioManager.PlayMusic(assets.musicTitle);
         }
 
-        IEnumerator LevelIntro(int index)
+        IEnumerator LevelIntro(int index, bool fromCheckpoint = false)
         {
             Time.timeScale = 1f;
             Current = Phase.Intro;
@@ -155,20 +156,22 @@ namespace SuperOttie.Game
             _ui.SetFadeImmediate(0f);
             yield return new WaitForSecondsRealtime(IntroSeconds);
 
-            BuildLevel(data);
+            _checkpointReached = fromCheckpoint && data.Checkpoint.HasValue;
+            BuildLevel(data, _checkpointReached);
             _ui.Show(GameUI.Screen.Playing);
             audioManager.PlayMusic(assets.GetTheme(data.Theme).music);
             Current = Phase.Playing;
         }
 
-        void BuildLevel(LevelData data)
+        void BuildLevel(LevelData data, bool fromCheckpoint)
         {
             _ctx = new LevelContext(data, assets, _session, audioManager, gameCamera.Camera);
             _ctx.PlayerDied += OnPlayerDied;
             _ctx.GoalReached += OnGoalReached;
             _ctx.PlayerFinishedGoal += OnPlayerFinishedGoal;
+            _ctx.CheckpointReached += () => _checkpointReached = true;
             _input.ResetEdges();
-            _level = LevelBuilder.Build(_ctx, _input);
+            _level = LevelBuilder.Build(_ctx, _input, fromCheckpoint: fromCheckpoint);
             gameCamera.Follow(_level.Player.transform, _level.CameraBounds);
 
             _timer = new LevelTimer(data.TimeLimit);
@@ -204,7 +207,7 @@ namespace SuperOttie.Game
             _ui.FadeTo(1f);
             yield return new WaitForSecondsRealtime(0.4f);
             if (_session.LoseLife()) yield return GameOver();
-            else yield return LevelIntro(_session.LevelIndex);
+            else yield return LevelIntro(_session.LevelIndex, _checkpointReached);
         }
 
         void OnGoalReached(int flagScore)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SuperOttie.Level
 {
@@ -9,7 +10,7 @@ namespace SuperOttie.Level
     public static class LevelLint
     {
         /// <summary>Widest pit (in cells) a running jump clears with a comfortable margin.</summary>
-        public const int MaxPitWidth = 5;
+        public const int MaxPitWidth = 4;
 
         /// <summary>Tallest single step up (in cells) reachable with a full jump.</summary>
         public const int MaxStepUp = 4;
@@ -19,14 +20,7 @@ namespace SuperOttie.Level
             var problems = new List<string>();
             var solid = BuildSolidGrid(level, problems);
 
-            // Floor surface per column: height of the solid stack that starts at row 0 (0 = pit).
-            var surface = new int[level.Width];
-            for (int x = 0; x < level.Width; x++)
-            {
-                int h = 0;
-                while (h < level.Height && solid[x, h]) h++;
-                surface[x] = h;
-            }
+            var surface = FloorSurface(solid, level.Width, level.Height);
 
             int pit = 0;
             for (int x = 0; x < level.Width; x++)
@@ -47,6 +41,12 @@ namespace SuperOttie.Level
                 if (step > MaxStepUp) problems.Add($"Step up of {step} cells at x={x} is higher than a jump ({MaxStepUp}).");
             }
 
+            if (level.Checkpoint is Vector2Int k)
+            {
+                if (k.y == 0 || !solid[k.x, k.y - 1]) problems.Add($"Checkpoint {k} must stand on solid ground.");
+                if (k.x <= level.PlayerStart.x || k.x >= level.FlagCell.x) problems.Add("Checkpoint must be between the start and the flag.");
+            }
+
             var start = level.PlayerStart;
             if (solid[start.x, start.y]) problems.Add($"Player start {start} is inside a solid cell.");
             if (level.FlagCell.x <= start.x) problems.Add("Flagpole must be to the right of the player start.");
@@ -57,6 +57,21 @@ namespace SuperOttie.Level
                 if (level.IsSolidTile(s.Cell.x, s.Cell.y)) problems.Add($"{s} overlaps a solid tile.");
             }
             return problems;
+        }
+
+        /// <summary>Height of the solid stack starting at row 0 for each column, including pipes (0 = pit).</summary>
+        public static int[] FloorSurface(LevelData level) => FloorSurface(BuildSolidGrid(level, new List<string>()), level.Width, level.Height);
+
+        static int[] FloorSurface(bool[,] solid, int width, int height)
+        {
+            var surface = new int[width];
+            for (int x = 0; x < width; x++)
+            {
+                int h = 0;
+                while (h < height && solid[x, h]) h++;
+                surface[x] = h;
+            }
+            return surface;
         }
 
         static bool[,] BuildSolidGrid(LevelData level, List<string> problems)

@@ -34,10 +34,12 @@ namespace SuperOttie.Level
         public event Action PlayerDied;
         public event Action<int> GoalReached;
         public event Action PlayerFinishedGoal;
+        public event Action CheckpointReached;
 
         public void RaisePlayerDied() => PlayerDied?.Invoke();
         public void RaiseGoalReached(int flagScore) => GoalReached?.Invoke(flagScore);
         public void RaisePlayerFinishedGoal() => PlayerFinishedGoal?.Invoke();
+        public void RaiseCheckpointReached() => CheckpointReached?.Invoke();
 
         /// <summary>World-space right edge of what the camera shows (enemies wake up just beyond it).</summary>
         public float CameraRightEdge

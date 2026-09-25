@@ -25,7 +25,7 @@ namespace SuperOttie.Level
     /// Rows are listed top to bottom. Legend:
     /// <c>.</c>/space empty, <c>#</c> ground, <c>S</c> stone, <c>c</c> coin, <c>?</c> coin block,
     /// <c>M</c> power-up block, <c>B</c> brick, <c>e</c> crab, <c>f</c> pufferfish, <c>P</c> player start,
-    /// <c>F</c> flagpole base, <c>[]</c> pipe top with <c>||</c> pipe body below it,
+    /// <c>F</c> flagpole base, <c>K</c> mid-level checkpoint, <c>[]</c> pipe top with <c>||</c> pipe body below it,
     /// decorations: <c>d</c> bush, <c>w</c> flowers, <c>r</c> reeds, <c>n</c> signpost.
     /// </summary>
     public static class LevelParser
@@ -91,7 +91,7 @@ namespace SuperOttie.Level
 
             var tiles = new TileKind[width, height];
             var spawns = new List<Spawn>();
-            Vector2Int? player = null, flag = null;
+            Vector2Int? player = null, flag = null, checkpoint = null;
 
             for (int y = 0; y < height; y++)
             {
@@ -122,6 +122,11 @@ namespace SuperOttie.Level
                             if (player.HasValue) throw new LevelFormatException($"Second player start at {cell}.");
                             player = cell;
                             break;
+                        case 'K':
+                            if (checkpoint.HasValue) throw new LevelFormatException($"Second checkpoint at {cell}.");
+                            checkpoint = cell;
+                            spawns.Add(new Spawn(SpawnKind.Checkpoint, cell));
+                            break;
                         case 'F':
                             if (flag.HasValue) throw new LevelFormatException($"Second flagpole at {cell}.");
                             flag = cell;
@@ -140,7 +145,7 @@ namespace SuperOttie.Level
             if (!player.HasValue) throw new LevelFormatException("Map has no player start 'P'.");
             if (!flag.HasValue) throw new LevelFormatException("Map has no flagpole 'F'.");
 
-            return new LevelData(name, theme, time, tiles, spawns, player.Value, flag.Value);
+            return new LevelData(name, theme, time, tiles, spawns, player.Value, flag.Value, checkpoint);
         }
 
         /// <summary>A pipe is '[' ']' on its top row with '||' below, down to something solid.</summary>

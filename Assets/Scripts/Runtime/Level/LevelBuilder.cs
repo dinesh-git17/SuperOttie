@@ -26,7 +26,8 @@ namespace SuperOttie.Level
     /// <summary>Turns <see cref="LevelData"/> into GameObjects: tilemap terrain, blocks, pickups, enemies, goal.</summary>
     public static class LevelBuilder
     {
-        public static BuiltLevel Build(LevelContext ctx, IPlayerInput input, bool withBackground = true)
+        /// <param name="fromCheckpoint">Start Ottie at the level's checkpoint (after dying past it).</param>
+        public static BuiltLevel Build(LevelContext ctx, IPlayerInput input, bool withBackground = true, bool fromCheckpoint = false)
         {
             var data = ctx.Data;
             var assets = ctx.Assets;
@@ -39,11 +40,11 @@ namespace SuperOttie.Level
             var level = new BuiltLevel { Root = root };
             foreach (var spawn in data.Spawns)
             {
-                var goal = SpawnEntity(ctx, spawn, root.transform);
+                var goal = SpawnEntity(ctx, spawn, root.transform, fromCheckpoint);
                 if (goal != null) level.Goal = goal;
             }
 
-            var start = data.PlayerStart;
+            var start = fromCheckpoint && data.Checkpoint.HasValue ? data.Checkpoint.Value : data.PlayerStart;
             level.Player = PlayerController.Spawn(ctx, input, new Vector2(start.x + 0.5f, start.y), root.transform);
             level.CameraBounds = new Rect(0f, 0f, data.Width, Mathf.Max(data.Height + 2f, PlatformerCamera.DefaultOrthographicSize * 2f));
 
@@ -120,7 +121,7 @@ namespace SuperOttie.Level
             }
         }
 
-        static GoalPole SpawnEntity(LevelContext ctx, Spawn spawn, Transform parent)
+        static GoalPole SpawnEntity(LevelContext ctx, Spawn spawn, Transform parent, bool fromCheckpoint)
         {
             var a = ctx.Assets;
             var cell = spawn.Cell;
@@ -179,6 +180,17 @@ namespace SuperOttie.Level
                     break;
                 case SpawnKind.Flag:
                     return BuildGoal(ctx, spawn, parent);
+                case SpawnKind.Checkpoint:
+                {
+                    var go = NewObject("Checkpoint", feet, Layers.Item, parent);
+                    var box = go.AddComponent<BoxCollider2D>();
+                    box.isTrigger = true;
+                    box.size = new Vector2(1f, 4f);
+                    box.offset = new Vector2(0f, 2f);
+                    var sr = SpriteObjects.Create("Visual", a.sign, go.transform, Vector3.zero, Sorting.Decor);
+                    go.AddComponent<Checkpoint>().Init(ctx, sr, startReached: fromCheckpoint);
+                    break;
+                }
                 case SpawnKind.Bush:
                 case SpawnKind.Flowers:
                 case SpawnKind.Reeds:

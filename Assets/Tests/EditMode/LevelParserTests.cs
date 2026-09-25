@@ -90,6 +90,15 @@ namespace SuperOttie.Tests
             Assert.Throws<LevelFormatException>(() => LevelParser.Parse(text), why);
 
         [Test]
+        public void Checkpoint_IsOptionalAndParsed()
+        {
+            Assert.That(LevelParser.Parse("---\nP.F\n###\n").Checkpoint, Is.Null);
+            var level = LevelParser.Parse("---\nP.K.F\n#####\n");
+            Assert.That(level.Checkpoint, Is.EqualTo(new Vector2Int(2, 1)));
+            Assert.Throws<LevelFormatException>(() => LevelParser.Parse("---\nPKK.F\n#####\n"));
+        }
+
+        [Test]
         public void WindowsLineEndings_Parse()
         {
             var level = LevelParser.Parse("name: A\r\n---\r\nP.F\r\n###\r\n");
@@ -112,6 +121,7 @@ namespace SuperOttie.Tests
             var problems = LevelLint.Validate(level);
             Assert.That(problems, Is.Empty, string.Join("\n", problems));
             Assert.That(level.Spawns.Count(s => s.Kind == SpawnKind.QuestionPowerUp), Is.GreaterThan(0), "each level offers a power-up");
+            Assert.That(level.Checkpoint.HasValue, Is.True, "each level has a midway checkpoint");
             Assert.That(new[] { "day", "sunset", "twilight" }, Does.Contain(level.Theme));
         }
     }
@@ -130,6 +140,13 @@ namespace SuperOttie.Tests
         {
             var level = LevelParser.Parse("---\n..S....\n..S....\n..S....\n..S....\n..S....\nP.S...F\n#######\n");
             Assert.That(LevelLint.Validate(level), Has.Some.Contains("Step up"));
+        }
+
+        [Test]
+        public void FloatingCheckpoint_IsReported()
+        {
+            var level = LevelParser.Parse("---\nP..K..F\n###.###\n");
+            Assert.That(LevelLint.Validate(level), Has.Some.Contains("Checkpoint"));
         }
 
         [Test]

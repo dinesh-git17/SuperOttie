@@ -1,0 +1,5 @@
+Image: enemy sprites for a cute platformer, 5 sprites in a 3 columns x 2 rows grid (bottom-right cell empty), all the SAME scale, wide white gaps between them.
+Row 1: a grumpy little red crab with angry eyebrows and raised pincers, SIDE VIEW facing LEFT: (1) walking frame with legs spread, (2) walking frame with legs together, (3) the same crab squashed flat like a pancake with dizzy spiral eyes.
+Row 2: a round spiky blue-and-purple pufferfish, puffed up, SIDE VIEW facing LEFT, with small fins and a grumpy pout: (4) fins raised, (5) fins lowered.
+Style: polished 2D side-scrolling platformer game art, cute chunky cartoon in the spirit of a modern Nintendo 2D Mario game, bold clean dark-brown outlines, soft cel shading with 2-3 tones, bright saturated colors. No text, no letters, no numbers, no watermark, no signature.
+Background: pure flat white (#FFFFFF) everywhere around the objects, no ground, no cast shadows, no floor line, no frames, no borders, no grid lines.

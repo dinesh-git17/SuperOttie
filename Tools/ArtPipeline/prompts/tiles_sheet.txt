@@ -1,0 +1,5 @@
+Image: two square ground tiles for a 2D side-scrolling platformer, placed side by side with a wide white gap between them, both seen straight on (flat, no perspective), each the same size, landscape 1536x1024 image.
+(Left) a grass-topped ground tile: the top quarter is bright lush green grass with a soft scalloped lower edge, the rest is rich warm brown soil with a few small pebbles and roots. The grass and soil pattern should look like it continues seamlessly off the left and right edges of the square (no border, no outline on the left, right or bottom sides).
+(Right) a plain soil fill tile using the exact same brown soil texture, pebbles, and colors, designed to tile seamlessly in all directions (no border, no outline, no grass).
+Style: polished 2D side-scrolling platformer game art, cute chunky cartoon in the spirit of a modern Nintendo 2D Mario game, bold clean dark-brown outlines, soft cel shading with 2-3 tones, bright saturated colors. No text, no letters, no numbers, no watermark, no signature.
+Background: pure flat white (#FFFFFF) everywhere around the objects, no ground, no cast shadows, no floor line, no frames, no borders, no grid lines.
