@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 005baccb8dc6945479a9e0f06af0adcf, type: 3}
+  m_Name: GameAssets
+  m_EditorClassIdentifier: SuperOttie.Runtime::SuperOttie.Game.GameAssets
+  playerIdle: {fileID: 21300000, guid: 21d82fbbe47bd48d3a9375e42c887103, type: 3}
+  playerRun:
+  - {fileID: 21300000, guid: f26c963a9bb304ed59423760fb62d855, type: 3}
+  - {fileID: 21300000, guid: 2fae5037a62fd4b66b14af1b2b3c6ec9, type: 3}
+  - {fileID: 21300000, guid: 7b2abc56f2dfa4e2c986520c996b5e7f, type: 3}
+  - {fileID: 21300000, guid: 72720374fb9c443a38ca2c1a0cea6389, type: 3}
+  playerJump: {fileID: 21300000, guid: 87a4ffeab4dd7495d8b5a657e8d880f4, type: 3}
+  playerFall: {fileID: 21300000, guid: 1fc18fcb63566454992d25966b0afb79, type: 3}
+  playerHurt: {fileID: 21300000, guid: 2d4a0d154b3c64024a7e14cbdfd2438b, type: 3}
+  playerWin: {fileID: 21300000, guid: e807a10ac2cc24d569ae1bf031f121cf, type: 3}
+  crabWalk:
+  - {fileID: 21300000, guid: f3081d199fc8b4bb2b3731bf3b344896, type: 3}
+  - {fileID: 21300000, guid: 9f27f1e3ca99542768e3e0cf09eb473a, type: 3}
+  crabFlat: {fileID: 21300000, guid: 3cb1714122e244cbfa1c2346f9e0c5cb, type: 3}
+  puffer:
+  - {fileID: 21300000, guid: ffa027ff3a35b4715b017ddc7b5c00d1, type: 3}
+  - {fileID: 21300000, guid: c71f7f9694e3146ff835f1dff635d0ae, type: 3}
+  coin: {fileID: 21300000, guid: cff61cddb03754417ad7d771fb315de0, type: 3}
+  fish: {fileID: 21300000, guid: 66ce5133c7dff4eab98f32e3ece54344, type: 3}
+  blockQuestion: {fileID: 21300000, guid: d27c1a420ca3b4a73b4bc887b75bc10d, type: 3}
+  blockUsed: {fileID: 21300000, guid: 102c5aa508c8948f1befd44ac3489ed7, type: 3}
+  blockBrick: {fileID: 21300000, guid: d864146de6c7741a89a1db3cf84df9dd, type: 3}
+  blockStone: {fileID: 21300000, guid: 0d60a98c31f984f0daad4935ad93f7f4, type: 3}
+  tileGrass: {fileID: 21300000, guid: 52a203c14d7fe4c38924a431fca2579f, type: 3}
+  tileDirt: {fileID: 21300000, guid: 7a5db0ae781f249968d6cfa2f57cd209, type: 3}
+  pipeTop: {fileID: 21300000, guid: f04a1bc126c6c4447bfb99d61d8f0fa0, type: 3}
+  pipeBody: {fileID: 21300000, guid: 5ae7944b263d642d39409b3484ae5aae, type: 3}
+  flagPole: {fileID: 21300000, guid: 6448cc41d6b8c4ea8ad5cb92f33befc3, type: 3}
+  flagBall: {fileID: 21300000, guid: 879a5bfce6a864455a52554fb687c39e, type: 3}
+  flag: {fileID: 21300000, guid: 0a557e74132c847d59819701a53a98d9, type: 3}
+  bush: {fileID: 21300000, guid: 8630d593da52d42e3960cf642ba2f45a, type: 3}
+  flowers: {fileID: 21300000, guid: 666c18f6330b447f49ea52baee5a433d, type: 3}
+  reeds: {fileID: 21300000, guid: 7fc93fdc0047f41e6b9fe0e202363b4e, type: 3}
+  sign: {fileID: 21300000, guid: 04088f4e1754e49ddb1628731ec0b4c1, type: 3}
+  themes:
+  - id: day
+    background: {fileID: 21300000, guid: bfeba94e7218740108d3c669bf7ceb70, type: 3}
+    skyColor: {r: 0.56, g: 0.8, b: 1, a: 1}
+    music: {fileID: 8300000, guid: afd302d3f4b1e4a609d8891ebc228e59, type: 3}
+  - id: sunset
+    background: {fileID: 21300000, guid: 2c3dd5b50fb594254965c4acea23ac76, type: 3}
+    skyColor: {r: 1, g: 0.66, b: 0.5, a: 1}
+    music: {fileID: 8300000, guid: 5cdf32181c63a40e6839c762788f4e2c, type: 3}
+  - id: twilight
+    background: {fileID: 21300000, guid: 54bc59bbc38ee41319a6e7858fc0bd87, type: 3}
+    skyColor: {r: 0.16, g: 0.16, b: 0.36, a: 1}
+    music: {fileID: 8300000, guid: ea118fcbd22fa4a098ad8b183e9950da, type: 3}
+  levels:
+  - {fileID: 4900000, guid: ae5a4c630116d444b813df53a65b6502, type: 3}
+  - {fileID: 4900000, guid: 91601d5dcca3448888d8392f47a2b6ba, type: 3}
+  - {fileID: 4900000, guid: f5a66294c27794dbebc61e2b2a21f366, type: 3}
+  uiLayout: {fileID: 9197481963319205126, guid: c00966d06f5a940cb9d507b0e759530c, type: 3}
+  panelSettings: {fileID: 11400000, guid: c10fb71d171d14642b05297f236c46ce, type: 2}
+  font: {fileID: 12800000, guid: 7c487e9f77aab43d085e61b0fd5cec0e, type: 3}
+  logo: {fileID: 21300000, guid: b76621b92f2814040a98d96b1857329a, type: 3}
+  titleArt: {fileID: 21300000, guid: 869547558e8724f8e804074097ae3655, type: 3}
+  iconLife: {fileID: 21300000, guid: 0ba7ccb425b9f41bebd93b5b4130591c, type: 3}
+  buttonLeft: {fileID: 21300000, guid: 191afb77b85fd49bca94f686796db690, type: 3}
+  buttonRight: {fileID: 21300000, guid: 4d3ddb28e17764f949d583d0d9cf8170, type: 3}
+  buttonJump: {fileID: 21300000, guid: 66634a262c8d6487d9b5ffbb852c51fb, type: 3}
+  buttonPause: {fileID: 21300000, guid: 8806db564444e4c29be7d4874fbecc62, type: 3}
+  musicTitle: {fileID: 8300000, guid: 682d3b1d3f7794d3380b56a78cd36751, type: 3}
+  musicEnding: {fileID: 8300000, guid: 88ad93477381c4597b72c805274aa385, type: 3}
+  jingleLevelClear: {fileID: 8300000, guid: 961ee5e590eb2498fa1f17db725cb8bd, type: 3}
+  jingleGameOver: {fileID: 8300000, guid: 8c0ec6d923e3343cc82b9bca9370021f, type: 3}
+  jingleDeath: {fileID: 8300000, guid: 675dd98817ef0487bb0fd3480701e287, type: 3}
+  sfx:
+  - id: 0
+    clip: {fileID: 8300000, guid: 5a9b86781c91545ea8683ae49f4a9bae, type: 3}
+    volume: 0.7
+  - id: 1
+    clip: {fileID: 8300000, guid: 1412db631841549928150af88f2b6d8d, type: 3}
+    volume: 0.7
+  - id: 2
+    clip: {fileID: 8300000, guid: c929b39d180554151b3854fd54db1e7c, type: 3}
+    volume: 1
+  - id: 3
+    clip: {fileID: 8300000, guid: a4f2b1481f07c46f99f32442125cba3b, type: 3}
+    volume: 1
+  - id: 4
+    clip: {fileID: 8300000, guid: 10e6fda811a7643d4a24cc936b5ccd07, type: 3}
+    volume: 1
+  - id: 5
+    clip: {fileID: 8300000, guid: b36e1ebac72cc42018ba3f2f7e665192, type: 3}
+    volume: 1
+  - id: 6
+    clip: {fileID: 8300000, guid: 873441b83204548b08571ba2fd1ca092, type: 3}
+    volume: 1
+  - id: 7
+    clip: {fileID: 8300000, guid: ea58a24bccbde43d484cb799069e8c12, type: 3}
+    volume: 1
+  - id: 8
+    clip: {fileID: 8300000, guid: 342b58d27097247e49495950e737d534, type: 3}
+    volume: 1
+  - id: 9
+    clip: {fileID: 8300000, guid: 0b76755a0ee34471dafc5fd5ad5ff7cf, type: 3}
+    volume: 1
+  - id: 10
+    clip: {fileID: 8300000, guid: e2e6ce7e8adcc4059a7129f9eb46a1ce, type: 3}
+    volume: 1
+  - id: 11
+    clip: {fileID: 8300000, guid: e490db2dbe11045c2bed31314d7db22e, type: 3}
+    volume: 1
+  - id: 12
+    clip: {fileID: 8300000, guid: 1da0c6b49dce44afcb536ce9c1055e22, type: 3}
+    volume: 1
+  - id: 13
+    clip: {fileID: 8300000, guid: 30685831485b948d1a8c9304ec130e3a, type: 3}
+    volume: 1
+  - id: 14
+    clip: {fileID: 8300000, guid: 648095a6bb8b942569d059d129b0f31f, type: 3}
+    volume: 0.5
+  - id: 15
+    clip: {fileID: 8300000, guid: ba41e1b4c8b344aeaa655247a08a1777, type: 3}
+    volume: 1

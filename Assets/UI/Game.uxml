@@ -1,0 +1,81 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="Game.uss" />
+    <ui:VisualElement name="root" class="root" picking-mode="Ignore">
+
+        <!-- Gameplay layer: HUD + touch controls, padded to the device safe area. -->
+        <ui:VisualElement name="safe" class="fill" picking-mode="Ignore">
+            <ui:VisualElement name="hud" class="hud" picking-mode="Ignore">
+                <ui:VisualElement class="hud-group" picking-mode="Ignore">
+                    <ui:VisualElement class="hud-item" picking-mode="Ignore">
+                        <ui:VisualElement name="hud-life-icon" class="hud-icon" picking-mode="Ignore" />
+                        <ui:Label name="hud-lives" text="x3" class="hud-text" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="hud-item" picking-mode="Ignore">
+                        <ui:VisualElement name="hud-coin-icon" class="hud-icon" picking-mode="Ignore" />
+                        <ui:Label name="hud-coins" text="x00" class="hud-text" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label name="hud-score" text="000000" class="hud-text hud-score" picking-mode="Ignore" />
+                <ui:VisualElement class="hud-group" picking-mode="Ignore">
+                    <ui:Label name="hud-world" text="1-1" class="hud-text hud-small" picking-mode="Ignore" />
+                    <ui:Label name="hud-time" text="300" class="hud-text" picking-mode="Ignore" />
+                    <ui:VisualElement name="btn-pause" class="pause-button" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="controls" class="controls" picking-mode="Ignore">
+                <ui:VisualElement class="dpad" picking-mode="Ignore">
+                    <ui:VisualElement name="btn-left" class="ctrl" picking-mode="Ignore" />
+                    <ui:VisualElement name="btn-right" class="ctrl" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="btn-jump" class="ctrl ctrl-jump" picking-mode="Ignore" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="banner" class="banner" picking-mode="Ignore">
+                <ui:Label name="banner-text" text="COURSE CLEAR!" class="banner-text" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="title" class="screen" picking-mode="Ignore">
+            <ui:VisualElement name="title-art" class="fill title-art" picking-mode="Ignore" />
+            <ui:VisualElement name="title-logo" class="title-logo" picking-mode="Ignore" />
+            <ui:Label name="title-prompt" text="Tap to start" class="title-prompt" picking-mode="Ignore" />
+            <ui:Label name="title-best" text="Best 000000" class="title-best" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="intro" class="screen screen-dark" picking-mode="Ignore">
+            <ui:Label name="intro-world" text="WORLD 1-1" class="big-text" picking-mode="Ignore" />
+            <ui:Label name="intro-name" text="Sunny Meadow" class="mid-text" picking-mode="Ignore" />
+            <ui:VisualElement class="intro-lives" picking-mode="Ignore">
+                <ui:VisualElement name="intro-life-icon" class="intro-icon" picking-mode="Ignore" />
+                <ui:Label name="intro-lives" text="x 3" class="big-text" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="pause" class="screen screen-dim" picking-mode="Ignore">
+            <ui:VisualElement class="panel" picking-mode="Ignore">
+                <ui:Label text="Paused" class="big-text" picking-mode="Ignore" />
+                <ui:Label name="pause-resume" text="Resume" class="menu-button" picking-mode="Ignore" />
+                <ui:Label name="pause-restart" text="Restart level" class="menu-button" picking-mode="Ignore" />
+                <ui:Label name="pause-sound" text="Sound: On" class="menu-button" picking-mode="Ignore" />
+                <ui:Label name="pause-quit" text="Quit to title" class="menu-button" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="gameover" class="screen screen-dark" picking-mode="Ignore">
+            <ui:Label text="GAME OVER" class="huge-text" picking-mode="Ignore" />
+            <ui:Label name="gameover-score" text="Score 000000" class="mid-text" picking-mode="Ignore" />
+            <ui:Label text="Tap to continue" class="prompt-text blink" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="victory" class="screen screen-dim" picking-mode="Ignore">
+            <ui:VisualElement name="victory-ottie" class="victory-ottie" picking-mode="Ignore" />
+            <ui:Label text="You did it!" class="huge-text" picking-mode="Ignore" />
+            <ui:Label name="victory-score" text="Score 000000" class="mid-text" picking-mode="Ignore" />
+            <ui:Label name="victory-best" text="Best 000000" class="mid-text" picking-mode="Ignore" />
+            <ui:Label text="Tap to continue" class="prompt-text blink" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="fade" class="fill fade" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>
