@@ -184,9 +184,9 @@ namespace SuperOttie.Editor
 
             a.themes = new[]
             {
-                Theme("day", "bg_day", new Color(0.56f, 0.8f, 1f), "music_level1"),
-                Theme("sunset", "bg_sunset", new Color(1f, 0.66f, 0.5f), "music_level2"),
-                Theme("twilight", "bg_twilight", new Color(0.16f, 0.16f, 0.36f), "music_level3"),
+                Theme("day", "bg_day", new Color(0.56f, 0.8f, 1f), "music_level1", Color.white),
+                Theme("sunset", "bg_sunset", new Color(1f, 0.66f, 0.5f), "music_level2", new Color(1f, 0.88f, 0.8f)),
+                Theme("twilight", "bg_twilight", new Color(0.16f, 0.16f, 0.36f), "music_level3", new Color(0.72f, 0.76f, 0.95f)),
             };
 
             a.levels = Directory.GetFiles("Assets/Levels", "level*.txt").OrderBy(p => p, StringComparer.Ordinal)
@@ -233,8 +233,9 @@ namespace SuperOttie.Editor
             _ => 1f,
         };
 
-        static ThemeDefinition Theme(string id, string background, Color sky, string music) => new ThemeDefinition
+        static ThemeDefinition Theme(string id, string background, Color sky, string music, Color tint) => new ThemeDefinition
         {
+            terrainTint = tint,
             id = id,
             background = S(Art + $"Backgrounds/{background}.png"),
             skyColor = sky,

@@ -50,14 +50,17 @@ MonoBehaviour:
   - id: day
     background: {fileID: 21300000, guid: bfeba94e7218740108d3c669bf7ceb70, type: 3}
     skyColor: {r: 0.56, g: 0.8, b: 1, a: 1}
+    terrainTint: {r: 1, g: 1, b: 1, a: 1}
     music: {fileID: 8300000, guid: afd302d3f4b1e4a609d8891ebc228e59, type: 3}
   - id: sunset
     background: {fileID: 21300000, guid: 2c3dd5b50fb594254965c4acea23ac76, type: 3}
     skyColor: {r: 1, g: 0.66, b: 0.5, a: 1}
+    terrainTint: {r: 1, g: 0.88, b: 0.8, a: 1}
     music: {fileID: 8300000, guid: 5cdf32181c63a40e6839c762788f4e2c, type: 3}
   - id: twilight
     background: {fileID: 21300000, guid: 54bc59bbc38ee41319a6e7858fc0bd87, type: 3}
     skyColor: {r: 0.16, g: 0.16, b: 0.36, a: 1}
+    terrainTint: {r: 0.72, g: 0.76, b: 0.95, a: 1}
     music: {fileID: 8300000, guid: ea118fcbd22fa4a098ad8b183e9950da, type: 3}
   levels:
   - {fileID: 4900000, guid: ae5a4c630116d444b813df53a65b6502, type: 3}

@@ -92,7 +92,9 @@ def player_sheet():
 def enemies_sheet():
     parts = cutout_sheet("enemies_sheet", 5)
     crab_s = uniform_scale(parts, 0, 118, "w")
-    crabs = [ak.fit_on_canvas(ak.resize(p, crab_s), 192, 160) for p in parts[:3]]
+    # Walk frames are matched by height so the crab doesn't pulse; the flat pose keeps the sheet scale.
+    walk1_s = crab_s * parts[0].shape[0] / parts[1].shape[0]
+    crabs = [ak.fit_on_canvas(ak.resize(p, s), 192, 160) for p, s in zip(parts[:3], [crab_s, walk1_s, crab_s])]
     puff_s = uniform_scale(parts, 3, 118, "w")
     puffs = [ak.fit_on_canvas(ak.resize(p, puff_s), 160, 160) for p in parts[3:]]
     for i, name in enumerate(["crab_walk_0", "crab_walk_1", "crab_flat"]):
@@ -154,11 +156,10 @@ def row_widths(p):
 
 def goal_sheet():
     parts = cutout_sheet("goal_sheet", 3, merge_px=4)
-    pipe, pole, flag = sorted(parts, key=lambda p: -p.shape[1])[0], None, None
-    # Identify by shape: pipe = widest; flag = most square of the rest; pole = tallest & thin.
-    rest = [p for p in parts if p is not pipe]
-    pole = max(rest, key=lambda p: p.shape[0] / p.shape[1])
-    flag = next(p for p in rest if p is not pole)
+    # Reading order is left to right, as requested in the prompt: pipe, pole, flag.
+    pipe, pole, flag = parts
+    if pole.shape[0] / pole.shape[1] < pipe.shape[0] / pipe.shape[1]:
+        raise SheetError("goal_sheet: expected pipe, pole, flag from left to right")
 
     # Pipe: rim rows are the wide ones at the top.
     widths = row_widths(pipe)
@@ -180,7 +181,9 @@ def goal_sheet():
     # Pole: ball = wide rows near the top, shaft below.
     pw = row_widths(pole)
     shaft_w = np.median(pw[len(pw) // 2 :])
-    ball_end = next(y for y in range(len(pw)) if y > 5 and pw[y] < shaft_w * 1.3)
+    ball_search = int(len(pw) * 0.15)
+    ball_mid = int(np.argmax(pw[:ball_search]))  # widest row of the ball
+    ball_end = next(y for y in range(ball_mid, len(pw)) if pw[y] < shaft_w * 1.3)
     ball = ak.tight(pole[:ball_end])
     ball = ak.resize(ball, 48 / max(ball.shape[1], 1))
     shaft = ak.tight(pole[int(len(pw) * 0.4) : int(len(pw) * 0.6)])

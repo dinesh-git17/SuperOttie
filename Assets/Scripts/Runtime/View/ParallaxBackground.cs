@@ -14,6 +14,7 @@ namespace SuperOttie.View
         Camera _cam;
         SpriteRenderer _sr;
         float _period;
+        float _yOffset;
 
         public static ParallaxBackground Create(Sprite sprite, Camera cam, Transform parent, int sortingOrder)
         {
@@ -37,10 +38,13 @@ namespace SuperOttie.View
         {
             var size = _sr.sprite.bounds.size;
             float viewH = _cam.orthographicSize * 2f;
-            float scale = viewH * 1.08f / size.y;
+            float viewW = viewH * Mathf.Max(_cam.aspect, 2.2f);
+            // One repeat is at least as wide as the screen, so a sun or moon never appears twice.
+            float scale = Mathf.Max(viewH * 1.08f / size.y, viewW * 1.04f / size.x);
             transform.localScale = new Vector3(scale, scale, 1f);
             _period = size.x * scale;
-            float viewW = viewH * Mathf.Max(_cam.aspect, 2.4f);
+            // Crop the overflow mostly from the bottom (foreground) rather than the sky.
+            _yOffset = -(size.y * scale - viewH) * 0.2f;
             int copies = Mathf.CeilToInt(viewW / _period) + 2;
             _sr.size = new Vector2(size.x * copies, size.y);
         }
@@ -52,7 +56,7 @@ namespace SuperOttie.View
         {
             if (_cam == null) return;
             var c = _cam.transform.position;
-            transform.position = new Vector3(WrappedX(c.x, factor, _period), c.y, 10f);
+            transform.position = new Vector3(WrappedX(c.x, factor, _period), c.y + _yOffset, 10f);
         }
     }
 }

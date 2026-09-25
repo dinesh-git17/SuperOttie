@@ -26,6 +26,9 @@ namespace SuperOttie.Level
     /// <summary>Turns <see cref="LevelData"/> into GameObjects: tilemap terrain, blocks, pickups, enemies, goal.</summary>
     public static class LevelBuilder
     {
+        /// <summary>How much solid soil the camera shows under the bottom row.</summary>
+        public const float BelowGroundView = 1.0f;
+
         /// <param name="fromCheckpoint">Start Ottie at the level's checkpoint (after dying past it).</param>
         public static BuiltLevel Build(LevelContext ctx, IPlayerInput input, bool withBackground = true, bool fromCheckpoint = false)
         {
@@ -46,15 +49,30 @@ namespace SuperOttie.Level
 
             var start = fromCheckpoint && data.Checkpoint.HasValue ? data.Checkpoint.Value : data.PlayerStart;
             level.Player = PlayerController.Spawn(ctx, input, new Vector2(start.x + 0.5f, start.y), root.transform);
-            level.CameraBounds = new Rect(0f, 0f, data.Width, Mathf.Max(data.Height + 2f, PlatformerCamera.DefaultOrthographicSize * 2f));
+            // The view extends below row 0 so the floor sits above the on-screen buttons.
+            float top = Mathf.Max(data.Height + 2f, PlatformerCamera.DefaultOrthographicSize * 2f);
+            level.CameraBounds = Rect.MinMaxRect(0f, -BelowGroundView, data.Width, top);
 
             if (withBackground && ctx.Camera != null)
             {
                 var theme = assets.GetTheme(data.Theme);
                 ctx.Camera.backgroundColor = theme.skyColor;
+                ApplyTint(root.transform, theme.terrainTint);
                 if (theme.background != null) ParallaxBackground.Create(theme.background, ctx.Camera, root.transform, Sorting.Background);
             }
             return level;
+        }
+
+        /// <summary>Tints the static scenery (not characters or pickups) to match the backdrop's lighting.</summary>
+        static void ApplyTint(Transform root, Color tint)
+        {
+            if (tint == Color.white) return;
+            foreach (var map in root.GetComponentsInChildren<Tilemap>()) map.color = tint;
+            foreach (var sr in root.GetComponentsInChildren<SpriteRenderer>())
+            {
+                int order = sr.sortingOrder;
+                if (order == Sorting.Pipe || order == Sorting.Block || order == Sorting.Decor) sr.color = tint;
+            }
         }
 
         static void BuildTerrain(LevelData data, Game.GameAssets assets, Transform parent)
@@ -96,6 +114,11 @@ namespace SuperOttie.Level
                         break;
                 }
             }
+            // Decorative soil under the ground (pits stay open) so the lowered camera never sees a gap.
+            for (int x = 0; x < data.Width; x++)
+                if (data.GetTile(x, 0) == TileKind.Ground)
+                    for (int y = -3; y < 0; y++)
+                        map.SetTile(new Vector3Int(x, y, 0), dirt);
             map.CompressBounds();
             composite.GenerateGeometry();
         }

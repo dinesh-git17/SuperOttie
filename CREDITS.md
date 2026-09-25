@@ -17,5 +17,5 @@ Synthesised procedurally for this game (`Tools/ArtPipeline/sfx.py`).
 
 ## Art
 
-Generated with ChatGPT Images via the Codex CLI, based on the Ottie reference character, then
+Generated with ChatGPT Images (ChatGPT web), based on the Ottie reference character, then
 processed with `Tools/ArtPipeline/process.py`. Touch-control icons are drawn by `ui_icons.py`.

@@ -11,6 +11,8 @@ namespace SuperOttie.Game
         public string id = "day";
         public Sprite background;
         public Color skyColor = new Color(0.55f, 0.8f, 1f);
+        [Tooltip("Multiplied over terrain, blocks and pipes so they sit in the scene's light.")]
+        public Color terrainTint = Color.white;
         public AudioClip music;
     }
 

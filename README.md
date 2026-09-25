@@ -74,8 +74,9 @@ Design notes:
 ## Art pipeline
 
 All characters, props, tiles, backgrounds, the title art, logo and app icon were generated with
-ChatGPT Images through the Codex CLI (`Tools/ArtPipeline/gen.sh`, prompts in `prompts/`). The
-generator can't output transparency, so each asset is drawn on flat white and `process.py` cuts it
+ChatGPT Images from the prompts in `Tools/ArtPipeline/PROMPTS.md` (via ChatGPT web, since the Codex
+CLI route in `gen.sh` was down at the time); the raw outputs are kept in `Tools/ArtPipeline/raw/`.
+The generator can't output transparency, so each asset is drawn on flat white and `process.py` cuts it
 out: flood-fill of the white backdrop from the borders, alpha un-mixing of the anti-aliased fringe,
 slicing sheets into frames by connected components, uniform scaling and bottom-centre pivots, and
 edge cross-fading so tiles and backgrounds repeat seamlessly.
