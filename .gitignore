@@ -115,3 +115,4 @@ InitTestScene*.unity*
 Tools/ArtPipeline/__pycache__/
 Tools/ArtPipeline/previews/
 Tools/ArtPipeline/logs/
+Tools/__pycache__/
