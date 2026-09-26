@@ -24,9 +24,8 @@
             </ui:VisualElement>
 
             <ui:VisualElement name="controls" class="controls" picking-mode="Ignore">
-                <ui:VisualElement class="dpad" picking-mode="Ignore">
-                    <ui:VisualElement name="btn-left" class="ctrl" picking-mode="Ignore" />
-                    <ui:VisualElement name="btn-right" class="ctrl" picking-mode="Ignore" />
+                <ui:VisualElement name="stick" class="stick" picking-mode="Ignore">
+                    <ui:VisualElement name="stick-knob" class="stick-knob" picking-mode="Ignore" />
                 </ui:VisualElement>
                 <ui:VisualElement name="btn-jump" class="ctrl ctrl-jump" picking-mode="Ignore" />
             </ui:VisualElement>

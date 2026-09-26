@@ -199,8 +199,8 @@ namespace SuperOttie.Editor
             a.logo = S(Art + "UI/logo.png");
             a.titleArt = S(Art + "UI/title_art.png");
             a.iconLife = S(Art + "UI/icon_life.png");
-            a.buttonLeft = S(Art + "UI/btn_left.png");
-            a.buttonRight = S(Art + "UI/btn_right.png");
+            a.stickBase = S(Art + "UI/stick_base.png");
+            a.stickKnob = S(Art + "UI/stick_knob.png");
             a.buttonJump = S(Art + "UI/btn_jump.png");
             a.buttonPause = S(Art + "UI/btn_pause.png");
 

@@ -82,8 +82,8 @@ namespace SuperOttie.Game
         public Sprite logo;
         public Sprite titleArt;
         public Sprite iconLife;
-        public Sprite buttonLeft;
-        public Sprite buttonRight;
+        public Sprite stickBase;
+        public Sprite stickKnob;
         public Sprite buttonJump;
         public Sprite buttonPause;
 

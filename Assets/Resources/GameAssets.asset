@@ -72,8 +72,8 @@ MonoBehaviour:
   logo: {fileID: 21300000, guid: b76621b92f2814040a98d96b1857329a, type: 3}
   titleArt: {fileID: 21300000, guid: 869547558e8724f8e804074097ae3655, type: 3}
   iconLife: {fileID: 21300000, guid: 0ba7ccb425b9f41bebd93b5b4130591c, type: 3}
-  buttonLeft: {fileID: 21300000, guid: 191afb77b85fd49bca94f686796db690, type: 3}
-  buttonRight: {fileID: 21300000, guid: 4d3ddb28e17764f949d583d0d9cf8170, type: 3}
+  stickBase: {fileID: 21300000, guid: d35b594db842a4b40b65d9a98e948b72, type: 3}
+  stickKnob: {fileID: 21300000, guid: e2fe188d73df8429cba1a5ddfecd5e63, type: 3}
   buttonJump: {fileID: 21300000, guid: 66634a262c8d6487d9b5ffbb852c51fb, type: 3}
   buttonPause: {fileID: 21300000, guid: 8806db564444e4c29be7d4874fbecc62, type: 3}
   musicTitle: {fileID: 8300000, guid: 682d3b1d3f7794d3380b56a78cd36751, type: 3}

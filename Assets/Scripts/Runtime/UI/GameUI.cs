@@ -10,7 +10,7 @@ namespace SuperOttie.UI
 {
     /// <summary>
     /// View layer over the UI Toolkit document. Owns screen visibility, HUD text, the safe-area
-    /// padding and the screen-space hit areas of the touch buttons. All taps are routed through
+    /// padding and the screen-space layout of the touch controls. All taps are routed through
     /// <see cref="HandleTap"/> so the UI doesn't depend on an EventSystem and supports multi-touch.
     /// </summary>
     public sealed class GameUI
@@ -28,7 +28,7 @@ namespace SuperOttie.UI
 
         readonly VisualElement _root, _safe, _hud, _controls, _banner, _fade;
         readonly VisualElement _title, _intro, _pause, _gameOver, _victory;
-        readonly VisualElement _btnLeft, _btnRight, _btnJump, _btnPause;
+        readonly VisualElement _stick, _stickKnob, _btnJump, _btnPause;
         readonly Label _lives, _coins, _score, _world, _time;
         readonly Label _introWorld, _introName, _introLives, _titlePrompt, _titleBest;
         readonly Label _gameOverScore, _victoryScore, _victoryBest, _bannerText, _pauseSound;
@@ -69,8 +69,8 @@ namespace SuperOttie.UI
             _pause = Q("pause");
             _gameOver = Q("gameover");
             _victory = Q("victory");
-            _btnLeft = Q("btn-left");
-            _btnRight = Q("btn-right");
+            _stick = Q("stick");
+            _stickKnob = Q("stick-knob");
             _btnJump = Q("btn-jump");
             _btnPause = Q("btn-pause");
 
@@ -90,8 +90,8 @@ namespace SuperOttie.UI
             _bannerText = L("banner-text");
             _pauseSound = L("pause-sound");
 
-            SetImage(_btnLeft, assets.buttonLeft);
-            SetImage(_btnRight, assets.buttonRight);
+            SetImage(_stick, assets.stickBase);
+            SetImage(_stickKnob, assets.stickKnob);
             SetImage(_btnJump, assets.buttonJump);
             SetImage(_btnPause, assets.buttonPause);
             SetImage(Q("hud-life-icon"), assets.iconLife);
@@ -130,6 +130,7 @@ namespace SuperOttie.UI
             bool gameplay = screen == Screen.Playing || screen == Screen.Paused;
             SetVisible(_hud, gameplay);
             SetVisible(_controls, screen == Screen.Playing);
+            if (screen != Screen.Playing) _zones.Release();
             SetVisible(_title, screen == Screen.Title);
             SetVisible(_intro, screen == Screen.Intro);
             SetVisible(_pause, screen == Screen.Paused);
@@ -242,8 +243,11 @@ namespace SuperOttie.UI
             ApplySafeArea();
             UpdateTouchZones();
 
-            _btnLeft.EnableInClassList("ctrl-pressed", pressed.Left);
-            _btnRight.EnableInClassList("ctrl-pressed", pressed.Right);
+            _stick.EnableInClassList("stick-held", pressed.StickHeld);
+            // The knob travels up to the ring's inner edge, following the finger in both axes.
+            float travel = (_stick.resolvedStyle.width - _stickKnob.resolvedStyle.width) * 0.5f;
+            if (!(travel > 0f)) travel = 0f;
+            _stickKnob.style.translate = new Translate(pressed.Stick.x * travel, -pressed.Stick.y * travel);
             _btnJump.EnableInClassList("ctrl-pressed", pressed.Jump);
 
             _blinkTime += unscaledDt;
@@ -306,10 +310,11 @@ namespace SuperOttie.UI
         void UpdateTouchZones()
         {
             if (_controls.resolvedStyle.display == DisplayStyle.None) return;
-            var left = _btnLeft.worldBound;
-            if (float.IsNaN(left.width) || left.width <= 0f) return;
-            _zones.Left = PanelToScreen(left);
-            _zones.Right = PanelToScreen(_btnRight.worldBound);
+            var stick = _stick.worldBound;
+            if (float.IsNaN(stick.width) || stick.width <= 0f) return;
+            var stickOnScreen = PanelToScreen(stick);
+            _zones.StickCenter = stickOnScreen.center;
+            _zones.StickRadius = stickOnScreen.width * 0.5f;
             _zones.Jump = PanelToScreen(_btnJump.worldBound);
         }
 

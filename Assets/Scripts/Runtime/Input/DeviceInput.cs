@@ -8,16 +8,18 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 namespace SuperOttie.Input
 {
     /// <summary>
-    /// Merges touch buttons, keyboard and gamepad into one <see cref="IPlayerInput"/>, and exposes
+    /// Merges the touch stick and jump button, keyboard and gamepad into one <see cref="IPlayerInput"/>, and exposes
     /// menu-level signals (taps, pause, confirm).
     /// </summary>
     public sealed class DeviceInput : IPlayerInput
     {
         readonly TouchZones _zones;
         readonly EdgeDetector _edges = new EdgeDetector();
-        readonly List<Vector2> _touchPositions = new List<Vector2>(8);
+        readonly List<TouchPoint> _touches = new List<TouchPoint>(8);
         readonly List<Vector2> _tapsThisFrame = new List<Vector2>(4);
+        TouchButtons _buttons;
         int _lastRefreshFrame = -1;
+        const int MouseFingerId = -1;
 
         public DeviceInput(TouchZones zones)
         {
@@ -35,22 +37,21 @@ namespace SuperOttie.Input
             }
         }
 
-        /// <summary>Which on-screen buttons are held right now (for pressed-state feedback).</summary>
+        /// <summary>State of the on-screen stick and jump button this frame (for drawing them).</summary>
         public TouchButtons CurrentTouchButtons
         {
             get
             {
                 Refresh();
-                return _zones.Evaluate(_touchPositions);
+                return _buttons;
             }
         }
 
         public InputFrame Poll()
         {
             Refresh();
-            var touch = _zones.Evaluate(_touchPositions);
-            float move = touch.Move;
-            bool jump = touch.Jump;
+            float move = _buttons.Move;
+            bool jump = _buttons.Jump;
 
             var kb = Keyboard.current;
             if (kb != null)
@@ -96,13 +97,13 @@ namespace SuperOttie.Input
         {
             if (_lastRefreshFrame == Time.frameCount) return;
             _lastRefreshFrame = Time.frameCount;
-            _touchPositions.Clear();
+            _touches.Clear();
             _tapsThisFrame.Clear();
 
             foreach (var t in Touch.activeTouches)
             {
                 if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled) continue;
-                _touchPositions.Add(t.screenPosition);
+                _touches.Add(new TouchPoint(t.touchId, t.screenPosition));
                 if (t.phase == TouchPhase.Began) _tapsThisFrame.Add(t.screenPosition);
             }
 
@@ -111,9 +112,11 @@ namespace SuperOttie.Input
             if (mouse != null && Touch.activeTouches.Count == 0)
             {
                 var pos = mouse.position.ReadValue();
-                if (mouse.leftButton.isPressed) _touchPositions.Add(pos);
+                if (mouse.leftButton.isPressed) _touches.Add(new TouchPoint(MouseFingerId, pos));
                 if (mouse.leftButton.wasPressedThisFrame) _tapsThisFrame.Add(pos);
             }
+
+            _buttons = _zones.Evaluate(_touches);
         }
     }
 }

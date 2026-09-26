@@ -18,4 +18,4 @@ Synthesised procedurally for this game (`Tools/ArtPipeline/sfx.py`).
 ## Art
 
 Generated with ChatGPT Images (ChatGPT web), based on the Ottie reference character, then
-processed with `Tools/ArtPipeline/process.py`. Touch-control icons are drawn by `ui_icons.py`.
+processed with `Tools/ArtPipeline/process.py`. Touch controls (thumbstick, jump, pause) are drawn by `ui_icons.py`.

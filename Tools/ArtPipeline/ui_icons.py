@@ -1,4 +1,4 @@
-"""Touch-control button art (final, not placeholder): soft translucent discs with bold glyphs.
+"""Touch-control art (thumbstick, jump, pause): soft translucent discs with bold glyphs.
 Drawn at 4x and downsampled for smooth edges."""
 
 from pathlib import Path
@@ -24,15 +24,24 @@ def finish(im, name):
     print("wrote", name)
 
 
-def arrow(direction):
+def stick_base():
+    """Thumbstick ring with small chevrons at the left and right edges hinting the run axis."""
     im, d = disc()
     c = SIZE * S / 2
-    w = 62 * S
-    if direction == "right":
-        pts = [(c - w * 0.6, c - w), (c + w, c), (c - w * 0.6, c + w)]
-    else:
-        pts = [(c + w * 0.6, c - w), (c - w, c), (c + w * 0.6, c + w)]
-    d.polygon(pts, fill=(255, 255, 255, 245))
+    w, edge = 22 * S, 40 * S
+    for sign in (-1, 1):
+        tip = c + sign * (SIZE * S / 2 - edge)
+        back = tip - sign * w * 1.1
+        d.polygon([(back, c - w), (tip, c), (back, c + w)], fill=(255, 255, 255, 200))
+    return im
+
+
+def stick_knob():
+    """The thumb cap that follows the finger: a lighter filled disc with a bold rim."""
+    im = Image.new("RGBA", (SIZE * S, SIZE * S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    m = 8 * S
+    d.ellipse((m, m, SIZE * S - m, SIZE * S - m), fill=(255, 255, 255, 150), outline=(255, 255, 255, 250), width=14 * S)
     return im
 
 
@@ -55,7 +64,7 @@ def pause():
 
 
 if __name__ == "__main__":
-    finish(arrow("left"), "btn_left")
-    finish(arrow("right"), "btn_right")
+    finish(stick_base(), "stick_base")
+    finish(stick_knob(), "stick_knob")
     finish(jump(), "btn_jump")
     finish(pause(), "btn_pause")

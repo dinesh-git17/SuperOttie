@@ -7,13 +7,13 @@ starring Ottie, a chubby baby otter with round glasses. Built with Unity 6 (6000
 - Run, variable-height jump (coyote time + jump buffering), stomp crabs, avoid spiky pufferfish
 - `?` blocks with coins and the golden fish power-up (big Ottie breaks bricks and survives one hit)
 - Coins (100 = extra life), stomp chains, flagpole height bonus, time bonus, saved best score
-- Multi-touch on-screen controls laid out inside the device safe area; keyboard/gamepad also work
+- Multi-touch thumbstick and jump button laid out inside the device safe area; keyboard/gamepad also work
 
 ## Controls
 
 | Action | Touch | Keyboard | Gamepad |
 |---|---|---|---|
-| Move | left/right buttons (slide between them) | arrows / A D | stick / d-pad |
+| Move | thumbstick (keep your thumb down and slide left/right) | arrows / A D | stick / d-pad |
 | Jump (hold for higher) | jump button | Space / Up / W / Z | A |
 | Pause | pause button | Esc / P | Start |
 
@@ -47,7 +47,7 @@ Assets/
     Level/     LevelParser, LevelData, LevelLint, LevelBuilder, LevelContext
     Player/    PlatformerMotor (pure movement model), PlayerController, PlayerVisual
     Entities/  blocks, coins, fish power-up, enemies, flagpole, checkpoint, effects
-    Input/     DeviceInput (touch + keyboard + gamepad), TouchZones
+    Input/     DeviceInput (touch + keyboard + gamepad), TouchZones (thumbstick + jump)
     View/      PlatformerCamera, ParallaxBackground
     Audio/     AudioManager
     UI/        GameUI (UI Toolkit: Game.uxml / Game.uss)
