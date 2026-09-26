@@ -39,7 +39,7 @@ namespace SuperOttie.Tests
                 // Frame an interesting stretch a little way into the course.
                 level.Player.transform.position = new Vector3(Mathf.Min(40f, data.Width - 20f), 2f);
                 rig.Follow(level.Player.transform, level.CameraBounds);
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.12f);
                 cam.Render();
                 var tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
                 RenderTexture.active = rt;

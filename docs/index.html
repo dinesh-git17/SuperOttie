@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Super Ottie: a platformer for iPhone</title>
+  <meta name="description" content="Run, stomp and leap through six hand-painted worlds with Ottie, a chubby baby otter in round glasses. A side-scrolling platformer for iPhone.">
+  <meta name="theme-color" content="#eef6fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1522" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://dinesh-git17.github.io/SuperOttie/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Super Ottie">
+  <meta property="og:description" content="A tiny otter with a very big jump. Six worlds, made for iPhone.">
+  <meta property="og:url" content="https://dinesh-git17.github.io/SuperOttie/">
+  <meta property="og:image" content="https://dinesh-git17.github.io/SuperOttie/assets/img/og-card.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preload" as="image" href="assets/img/hero.webp" fetchpriority="high">
+  <link rel="preload" as="font" href="assets/fonts/LilitaOne-Regular.ttf" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="sentinel" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main">
+      <a class="brand" href="./" aria-label="Super Ottie home">
+        <img src="assets/img/app-icon.webp" alt="" width="36" height="36">
+        <span>Super Ottie</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#worlds">Worlds</a></li>
+        <li><a href="#how-to-play">How to play</a></li>
+        <li><a href="support.html">Support</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+      </ul>
+      <div class="nav-end">
+        <a class="btn btn-primary btn-sm" href="https://testflight.apple.com/join/H1V5YZrb">Join the beta</a>
+        <details class="menu">
+          <summary>Menu</summary>
+          <div class="menu-panel">
+            <a href="#worlds">Worlds</a>
+            <a href="#how-to-play">How to play</a>
+            <a href="support.html">Support</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="https://testflight.apple.com/join/H1V5YZrb">Join the beta</a>
+          </div>
+        </details>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <img class="hero-logo" src="assets/img/logo.webp" alt="Super Ottie" width="900" height="454">
+          <h1 id="hero-title">A tiny otter with a very big jump.</h1>
+          <p class="hero-sub">Run, stomp and leap through six hand-painted worlds with Ottie. Made for iPhone, played in landscape.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="https://testflight.apple.com/join/H1V5YZrb">Join the beta</a>
+            <a class="btn btn-ghost" href="#worlds">See the worlds</a>
+          </div>
+        </div>
+        <div class="hero-art">
+          <figure>
+            <img src="assets/img/hero.webp" alt="Ottie, a chubby otter in round glasses, leaping over a sunny meadow full of coins" width="1536" height="1024" fetchpriority="high">
+          </figure>
+          <img class="hero-coin" src="assets/img/coin.webp" alt="" width="90" height="92">
+          <img class="hero-fish" src="assets/img/fish.webp" alt="" width="112" height="92">
+        </div>
+      </div>
+    </section>
+
+    <section class="meet" aria-labelledby="meet-title">
+      <div class="wrap meet-head reveal">
+        <h2 id="meet-title">Meet Ottie.</h2>
+        <p>Chubby, brave and never seen without those round glasses. Ottie is small, but every jump counts.</p>
+      </div>
+      <div class="track" aria-hidden="true">
+        <img class="coin" src="assets/img/coin.webp" alt="" style="left: 18%" width="90" height="92">
+        <img class="coin" src="assets/img/coin.webp" alt="" style="left: 24%" width="90" height="92">
+        <img class="coin" src="assets/img/coin.webp" alt="" style="left: 58%" width="90" height="92">
+        <img class="coin" src="assets/img/coin.webp" alt="" style="left: 64%" width="90" height="92">
+        <img class="coin" src="assets/img/coin.webp" alt="" style="left: 70%" width="90" height="92">
+        <div class="runner">
+          <img src="assets/img/ottie_run_0.webp" alt="" width="256" height="256">
+          <img src="assets/img/ottie_run_1.webp" alt="" width="256" height="256">
+          <img src="assets/img/ottie_run_2.webp" alt="" width="256" height="256">
+          <img src="assets/img/ottie_run_3.webp" alt="" width="256" height="256">
+        </div>
+      </div>
+    </section>
+
+    <section class="worlds" id="worlds" aria-labelledby="worlds-title">
+      <div class="wrap worlds-head reveal">
+        <h2 id="worlds-title">Six worlds, one otter.</h2>
+        <div class="gallery-nav">
+          <button type="button" data-gallery-prev aria-label="Previous world" disabled>&larr;</button>
+          <button type="button" data-gallery-next aria-label="Next world">&rarr;</button>
+        </div>
+      </div>
+      <div class="gallery" tabindex="0" aria-label="The six worlds">
+        <figure class="world">
+          <img src="assets/img/world-meadow.webp" alt="Sunny Meadow: green hills, warp pipes and red crabs under a blue sky" width="1400" height="644" loading="lazy">
+          <figcaption><span class="num">1-1</span><h3>Sunny Meadow</h3><p>Blue skies, green pipes and your first crabs.</p></figcaption>
+        </figure>
+        <figure class="world">
+          <img src="assets/img/world-shore.webp" alt="Sunset Shore: platforms over a lake glowing orange at sunset" width="1400" height="644" loading="lazy">
+          <figcaption><span class="num">1-2</span><h3>Sunset Shore</h3><p>Hop across the water as the sun goes down.</p></figcaption>
+        </figure>
+        <figure class="world">
+          <img src="assets/img/world-woods.webp" alt="Twilight Woods: pufferfish drifting under a full moon" width="1400" height="644" loading="lazy">
+          <figcaption><span class="num">1-3</span><h3>Twilight Woods</h3><p>Pufferfish drift under a big full moon.</p></figcaption>
+        </figure>
+        <figure class="world">
+          <img src="assets/img/world-grove.webp" alt="Autumn Grove: orange forest, falling leaves and rows of coins" width="1400" height="644" loading="lazy">
+          <figcaption><span class="num">1-4</span><h3>Autumn Grove</h3><p>Falling leaves and brick ceilings full of coins.</p></figcaption>
+        </figure>
+        <figure class="world">
+          <img src="assets/img/world-peaks.webp" alt="Frosty Peaks: snowy ground and stone stairs below white mountains" width="1400" height="644" loading="lazy">
+          <figcaption><span class="num">1-5</span><h3>Frosty Peaks</h3><p>Snowy stepping stones over icy gaps.</p></figcaption>
+        </figure>
+        <figure class="world">
+          <img src="assets/img/world-caverns.webp" alt="Crystal Caverns: glowing crystals and a waterfall deep underground" width="1400" height="644" loading="lazy">
+          <figcaption><span class="num">1-6</span><h3>Crystal Caverns</h3><p>The final stretch, deep under glowing crystals.</p></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="play" id="how-to-play" aria-labelledby="play-title">
+      <div class="wrap">
+        <div class="reveal">
+          <h2 id="play-title">Easy to pick up.</h2>
+          <p class="play-intro">One thumb to move, one to jump. Everything else you learn by playing.</p>
+        </div>
+        <div class="bento">
+          <article class="cell cell-run reveal">
+            <img class="bg" src="assets/img/bg_day.webp" alt="" loading="lazy" width="900" height="690">
+            <div class="scrim"></div>
+            <div class="controls-demo" aria-hidden="true">
+              <div class="stick">
+                <img src="assets/img/stick_base.webp" alt="" width="256" height="256">
+                <img class="knob" src="assets/img/stick_knob.webp" alt="" width="256" height="256">
+              </div>
+              <img class="demo-otter" src="assets/img/ottie_idle.webp" alt="" width="256" height="256">
+            </div>
+            <h3>Slide to run</h3>
+            <p>Keep your thumb on the stick and slide left or right. No lifting needed to turn around.</p>
+          </article>
+          <article class="cell cell-jump reveal" style="--i: 1">
+            <img class="sprite" src="assets/img/btn_jump.webp" alt="" loading="lazy" width="256" height="256">
+            <h3>Tap to jump</h3>
+            <p>Hold the button longer to jump higher.</p>
+          </article>
+          <article class="cell cell-crab reveal" style="--i: 2">
+            <img class="bg" src="assets/img/bg_sunset.webp" alt="" loading="lazy" width="900" height="690">
+            <div class="scrim"></div>
+            <img class="sprite" src="assets/img/crab_walk_0.webp" alt="" loading="lazy" width="192" height="160">
+            <h3>Stomp the crabs</h3>
+            <p>Land on top. Chain stomps for bigger points.</p>
+          </article>
+          <article class="cell cell-fish reveal" style="--i: 1">
+            <img class="sprite" src="assets/img/fish.webp" alt="" loading="lazy" width="112" height="92">
+            <h3>Grab the golden fish</h3>
+            <p>Big Ottie breaks bricks and survives one bump.</p>
+          </article>
+          <article class="cell cell-puff reveal" style="--i: 2">
+            <img class="bg" src="assets/img/bg_twilight.webp" alt="" loading="lazy" width="900" height="690">
+            <div class="scrim"></div>
+            <img class="sprite" src="assets/img/puffer_0.webp" alt="" loading="lazy" width="160" height="160">
+            <h3>Dodge the pufferfish</h3>
+            <p>Too spiky to stomp. Jump around them.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="promise" aria-labelledby="promise-title">
+      <div class="wrap reveal">
+        <h2 id="promise-title">No ads. No accounts. Nothing tracked.</h2>
+        <p>Super Ottie doesn't collect any data. Your best score stays on your phone. <a href="privacy.html">Read the privacy policy</a></p>
+      </div>
+    </section>
+
+    <section class="closer" aria-labelledby="closer-title">
+      <div class="wrap">
+        <div class="closer-card reveal">
+          <img class="bg" src="assets/img/bg_cave.webp" alt="" loading="lazy" width="900" height="690">
+          <div>
+            <h2 id="closer-title">Play it before everyone else.</h2>
+            <p>The beta is open on TestFlight. Install it on your iPhone and every new build arrives on its own.</p>
+            <a class="btn btn-primary" href="https://testflight.apple.com/join/H1V5YZrb">Join the beta</a>
+          </div>
+          <img class="win" src="assets/img/ottie_win.webp" alt="Ottie cheering with both arms up" loading="lazy" width="256" height="256">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a class="brand" href="./"><img src="assets/img/app-icon.webp" alt="" width="36" height="36"><span>Super Ottie</span></a>
+          <p>Music by Juhani Junkala and Kenney. Lilita One font by Juan Montoreano.</p>
+        </div>
+        <div>
+          <h2>Game</h2>
+          <ul>
+            <li><a href="#worlds">Worlds</a></li>
+            <li><a href="#how-to-play">How to play</a></li>
+            <li><a href="https://testflight.apple.com/join/H1V5YZrb">Join the beta</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Help</h2>
+          <ul>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="https://github.com/dinesh-git17/SuperOttie">Source code</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-base">
+        <span>&copy; 2026 Dinesh Dawonauth</span>
+        <span>Made for iPhone</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
