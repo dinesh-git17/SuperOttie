@@ -96,8 +96,9 @@ namespace SuperOttie.Level
             composite.geometryType = CompositeCollider2D.GeometryType.Polygons;
             composite.sharedMaterial = SpriteObjects.Frictionless;
 
-            var grass = MakeTile(assets.tileGrass);
-            var dirt = MakeTile(assets.tileDirt);
+            var theme = assets.GetTheme(data.Theme);
+            var grass = MakeTile(assets.GroundTopFor(theme));
+            var dirt = MakeTile(assets.GroundFillFor(theme));
             var stone = MakeTile(assets.blockStone);
 
             for (int x = 0; x < data.Width; x++)
@@ -219,11 +220,12 @@ namespace SuperOttie.Level
                 case SpawnKind.Reeds:
                 case SpawnKind.Sign:
                 {
+                    var theme = a.GetTheme(ctx.Data.Theme);
                     var sprite = spawn.Kind switch
                     {
-                        SpawnKind.Bush => a.bush,
-                        SpawnKind.Flowers => a.flowers,
-                        SpawnKind.Reeds => a.reeds,
+                        SpawnKind.Bush => a.BushFor(theme),
+                        SpawnKind.Flowers => a.FlowersFor(theme),
+                        SpawnKind.Reeds => a.ReedsFor(theme),
                         _ => a.sign,
                     };
                     SpriteObjects.Create(spawn.Kind.ToString(), sprite, parent, feet, Sorting.Decor);

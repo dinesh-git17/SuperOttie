@@ -120,8 +120,27 @@ def items_sheet():
     checker_preview("items_sheet", [coin, fish] + blocks)
 
 
-def tiles_sheet():
-    parts = cutout_sheet("tiles_sheet", 2)
+def cutout_tiles(name):
+    """Square tiles can contain near-white (snow), so instead of flood-filling the backdrop, keep
+    each column from its first non-white pixel down: only the scalloped top edge becomes transparent."""
+    rgb = ak.load_rgb(RAW / f"{name}.png")
+    solid = ak.whiteness_distance(rgb) > 30
+    boxes = ak.split_components(solid.astype(np.float32) * 255, min_area=20000, merge_px=12)
+    if len(boxes) != 2:
+        raise SheetError(f"{name}: expected 2 tiles, found {len(boxes)}: {boxes}")
+    parts = []
+    for box in boxes:
+        tile = ak.crop(np.concatenate([rgb, np.full(rgb.shape[:2] + (1,), 255, np.float32)], axis=2), box)
+        mask = ak.crop(np.repeat(solid[..., None], 4, axis=2).astype(np.float32), box)[..., 0] > 0
+        top = np.where(mask.any(axis=0), mask.argmax(axis=0), mask.shape[0])
+        rows = np.arange(mask.shape[0])[:, None]
+        tile[..., 3] = np.where(rows >= top[None, :], 255, 0)
+        parts.append(tile)
+    return parts
+
+
+def tiles_sheet(sheet="tiles_sheet", suffix=""):
+    parts = cutout_sheet(sheet, 2) if sheet == "tiles_sheet" else cutout_tiles(sheet)
     grass, dirt = [ak.resize_to(p, 512, 512) for p in parts]
     # Trim the drawn border a little: generators like to add an outline around squares.
     grass = ak.resize_to(grass[6:-6, 10:-10], 512, 512)
@@ -137,12 +156,12 @@ def tiles_sheet():
     dirt[..., 3] = 255
     grass_t = ak.resize_to(grass, PPU, PPU)
     dirt_t = ak.resize_to(dirt, PPU, PPU)
-    save(grass_t, "Sprites/Tiles/tile_grass.png")
-    save(dirt_t, "Sprites/Tiles/tile_dirt.png")
+    save(grass_t, f"Sprites/Tiles/tile_grass{suffix}.png")
+    save(dirt_t, f"Sprites/Tiles/tile_dirt{suffix}.png")
     # Preview a 4x3 patch to judge seams.
     row_g = np.concatenate([grass_t] * 4, axis=1)
     row_d = np.concatenate([dirt_t] * 4, axis=1)
-    checker_preview("tiles_sheet", [np.concatenate([row_g, row_d, row_d], axis=0)])
+    checker_preview(sheet, [np.concatenate([row_g, row_d, row_d], axis=0)])
 
 
 def row_widths(p):
@@ -212,6 +231,19 @@ def decor_sheet():
     checker_preview("decor_sheet", out)
 
 
+def theme_decor(theme):
+    """Per-theme replacements for the bush, flowers and reeds slots (the signpost is shared)."""
+    parts = cutout_sheet(f"decor_{theme}", 3)
+    sizes = {"bush": ("w", 190), "flowers": ("w", 110), "reeds": ("h", 150)}
+    out = []
+    for p, (name, (axis, target)) in zip(parts, sizes.items()):
+        s = target / (p.shape[1] if axis == "w" else p.shape[0])
+        img = ak.resize(p, s)
+        save(img, f"Sprites/Decor/{name}_{theme}.png")
+        out.append(img)
+    checker_preview(f"decor_{theme}", out)
+
+
 def background(name):
     rgb = ak.load_rgb(RAW / f"{name}.png")
     rgba = np.concatenate([rgb, np.full(rgb.shape[:2] + (1,), 255, np.float32)], axis=2)
@@ -252,6 +284,14 @@ STEPS = {
     "bg_day": lambda: background("bg_day"),
     "bg_sunset": lambda: background("bg_sunset"),
     "bg_twilight": lambda: background("bg_twilight"),
+    "bg_autumn": lambda: background("bg_autumn"),
+    "bg_snow": lambda: background("bg_snow"),
+    "bg_cave": lambda: background("bg_cave"),
+    "tiles_snow": lambda: tiles_sheet("tiles_snow", "_snow"),
+    "tiles_cave": lambda: tiles_sheet("tiles_cave", "_cave"),
+    "decor_autumn": lambda: theme_decor("autumn"),
+    "decor_snow": lambda: theme_decor("snow"),
+    "decor_cave": lambda: theme_decor("cave"),
     "title_art": title_art,
     "logo": logo,
     "app_icon": app_icon,

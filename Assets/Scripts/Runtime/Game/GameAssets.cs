@@ -14,6 +14,13 @@ namespace SuperOttie.Game
         [Tooltip("Multiplied over terrain, blocks and pipes so they sit in the scene's light.")]
         public Color terrainTint = Color.white;
         public AudioClip music;
+
+        [Header("Optional overrides (empty = the shared sprite)")]
+        public Sprite tileGrass;
+        public Sprite tileDirt;
+        public Sprite bush;
+        public Sprite flowers;
+        public Sprite reeds;
     }
 
     [Serializable]
@@ -103,6 +110,14 @@ namespace SuperOttie.Game
             if (assets == null) throw new InvalidOperationException($"Missing Resources/{ResourcePath}.asset. Run 'Super Ottie > Setup Project'.");
             return assets;
         }
+
+        public Sprite GroundTopFor(ThemeDefinition theme) => Or(theme.tileGrass, tileGrass);
+        public Sprite GroundFillFor(ThemeDefinition theme) => Or(theme.tileDirt, tileDirt);
+        public Sprite BushFor(ThemeDefinition theme) => Or(theme.bush, bush);
+        public Sprite FlowersFor(ThemeDefinition theme) => Or(theme.flowers, flowers);
+        public Sprite ReedsFor(ThemeDefinition theme) => Or(theme.reeds, reeds);
+
+        static Sprite Or(Sprite themed, Sprite shared) => themed != null ? themed : shared;
 
         public ThemeDefinition GetTheme(string id)
         {

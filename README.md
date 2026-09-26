@@ -3,7 +3,8 @@
 A small side-scrolling platformer for iPhone (landscape) in the style of the classic Mario games,
 starring Ottie, a chubby baby otter with round glasses. Built with Unity 6 (6000.6.3f1, URP 2D).
 
-- 3 courses: Sunny Meadow, Sunset Shore, Twilight Woods, each with a midway checkpoint
+- 6 courses: Sunny Meadow, Sunset Shore, Twilight Woods, Autumn Grove, Frosty Peaks, Crystal Caverns,
+  each with a midway checkpoint, its own backdrop and music (snow and cave have their own ground and scenery)
 - Run, variable-height jump (coyote time + jump buffering), stomp crabs, avoid spiky pufferfish
 - `?` blocks with coins and the golden fish power-up (big Ottie breaks bricks and survives one hit)
 - Coins (100 = extra life), stomp chains, flagpole height bonus, time bonus, saved best score
@@ -53,7 +54,7 @@ Assets/
     UI/        GameUI (UI Toolkit: Game.uxml / Game.uss)
     Game/      GameManager (state machine), GameAssets catalogue, RuntimeSettings
   Scripts/Editor/  ProjectSetup (layers, player settings, assets, scene), BuildScript, import rules
-  Levels/     level1-3.txt, plain-text maps (legend in LevelParser.cs)
+  Levels/     level1-6.txt, plain-text maps (legend in LevelParser.cs)
   Art/ Audio/ Fonts/ UI/
 Tools/ArtPipeline/   image generation prompts and the cut-out/slicing pipeline
 ```

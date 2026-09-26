@@ -29,6 +29,9 @@ namespace SuperOttie.Tests
             bool _holding;
             float _held;
             float _holdFor;
+            float _sinceGrounded;
+
+            const float CoyoteGrace = 0.07f;
 
             public AutoPilot(int[] surface) => _surface = surface;
 
@@ -36,6 +39,9 @@ namespace SuperOttie.Tests
             {
                 if (Player == null) return default;
                 var p = Player.transform.position;
+                _sinceGrounded = Player.IsGrounded ? 0f : _sinceGrounded + Time.deltaTime;
+                // Like a player, it may still jump a moment after running off a ledge (the motor's coyote time).
+                bool canJump = Player.IsGrounded || (_sinceGrounded < CoyoteGrace && Player.Velocity.y <= 0f);
                 if (_holding)
                 {
                     _held += Time.deltaTime;
@@ -43,7 +49,7 @@ namespace SuperOttie.Tests
                     // Like a player: short hops for small steps, full jumps for pits and tall walls.
                     if (_held >= _holdFor || (_held > 0.12f && Player.Velocity.y <= 0f)) _holding = false;
                 }
-                else if (Player.IsGrounded && ObstacleAhead(p, out int rise))
+                else if (canJump && ObstacleAhead(p, out int rise))
                 {
                     _holding = true;
                     _held = 0f;
@@ -58,7 +64,7 @@ namespace SuperOttie.Tests
                 rise = 0;
                 float front = p.x + PlayerController.ColliderSize.x * 0.5f;
                 int feet = Mathf.RoundToInt(p.y);
-                int first = Mathf.FloorToInt(front), near = Mathf.FloorToInt(front + 1.1f), far = Mathf.FloorToInt(front + 3f);
+                int first = Mathf.FloorToInt(front), near = Mathf.FloorToInt(front + 1.1f), far = Mathf.FloorToInt(front + 2f);
                 bool pitSoon = false;
                 for (int c = first; c <= far && c < _surface.Length; c++)
                     if (c >= 0 && _surface[c] == 0) pitSoon = true;

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using SuperOttie.Game;
 using SuperOttie.Level;
 using UnityEngine;
 
@@ -122,7 +123,18 @@ namespace SuperOttie.Tests
             Assert.That(problems, Is.Empty, string.Join("\n", problems));
             Assert.That(level.Spawns.Count(s => s.Kind == SpawnKind.QuestionPowerUp), Is.GreaterThan(0), "each level offers a power-up");
             Assert.That(level.Checkpoint.HasValue, Is.True, "each level has a midway checkpoint");
-            Assert.That(new[] { "day", "sunset", "twilight" }, Does.Contain(level.Theme));
+            var themeIds = GameAssets.Load().themes.Select(t => t.id);
+            Assert.That(themeIds, Does.Contain(level.Theme), "theme is defined in GameAssets");
+        }
+
+        [Test]
+        public void EveryTheme_HasBackdropAndMusic()
+        {
+            foreach (var theme in GameAssets.Load().themes)
+            {
+                Assert.That(theme.background, Is.Not.Null, theme.id + " background");
+                Assert.That(theme.music, Is.Not.Null, theme.id + " music");
+            }
         }
     }
 

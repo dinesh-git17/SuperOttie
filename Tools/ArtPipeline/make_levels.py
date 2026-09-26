@@ -157,6 +157,92 @@ def level3():
     return L
 
 
+def level4():
+    L = Level("Autumn Grove", "autumn", 300, 218)
+    L.put(3, FLOOR, "P"); L.put(1, FLOOR, "d"); L.put(9, FLOOR, "w"); L.put(12, FLOOR, "r")
+    L.put(15, 5, "?B?"); L.put(16, 9, "M"); L.coins(21, 6, 3)
+    L.pipe(26, 2); L.put(31, FLOOR, "e"); L.pipe(34, 3)
+    L.pit(39, 3); L.coins(39, 7, 3)
+    L.put(45, FLOOR, "e"); L.put(47, FLOOR, "e"); L.put(49, FLOOR, "e")
+    L.put(44, 5, "BBBBBBB"); L.put(46, 9, "B?B"); L.coins(45, 6, 5)
+    L.stairs_up(55, 3); L.pit(58, 2); L.put(58, 7, "f"); L.stairs_down(60, 3)
+    L.put(66, FLOOR, "d")
+    L.platform(69, 5, 3); L.pit(73, 4); L.platform(74, 4, 2); L.coins(74, 5, 2)
+    L.put(81, FLOOR, "e"); L.put(83, FLOOR, "e")
+    L.pipe(86, 4); L.put(90, 7, "f"); L.pipe(93, 3)
+    L.put(98, 5, "?M?"); L.put(101, FLOOR, "e")
+    L.put(106, FLOOR, "K"); L.put(108, FLOOR, "w")
+    L.put(112, 5, "BB??BB"); L.put(113, 9, "BBBB"); L.put(114, 10, "e"); L.put(116, FLOOR, "e"); L.put(118, FLOOR, "e")
+    L.pit(122, 4); L.put(123, 5, "f")
+    L.stairs_up(129, 4); L.column(133, 4); L.pit(134, 2); L.stairs_down(136, 4)
+    L.put(142, FLOOR, "r")
+    L.put(146, 5, "?"); L.put(149, 5, "B?B"); L.put(152, 5, "?")
+    L.put(148, FLOOR, "e"); L.put(151, FLOOR, "e"); L.put(154, FLOOR, "e")
+    L.pipe(158, 2); L.pit(161, 3); L.pipe(166, 3); L.put(162, 7, "f")
+    L.put(171, FLOOR, "e"); L.put(173, FLOOR, "e")
+    L.stairs_up(178, 8); L.column(186, 8)
+    L.put(198, FLOOR, "F")
+    L.put(202, FLOOR, "d"); L.put(206, FLOOR, "n"); L.put(210, FLOOR, "w")
+    return L
+
+
+def level5():
+    L = Level("Frosty Peaks", "snow", 320, 222)
+    L.put(3, FLOOR, "P"); L.put(1, FLOOR, "r"); L.put(8, FLOOR, "d")
+    L.put(14, 5, "B?M?B"); L.coins(14, 9, 5)
+    L.pit(24, 3); L.platform(28, 5, 3); L.pit(32, 4); L.put(33, 5, "f")
+    L.put(38, FLOOR, "e"); L.put(40, FLOOR, "e")
+    L.stairs_up(44, 4); L.column(48, 4); L.pit(49, 2); L.stairs_down(51, 4); L.coins(49, 9, 2)
+    L.put(59, FLOOR, "e"); L.put(61, FLOOR, "e"); L.put(63, FLOOR, "e")
+    L.put(60, 5, "?B?B?")
+    L.pipe(68, 3); L.put(72, 8, "f"); L.pipe(75, 4); L.put(80, FLOOR, "e")
+    L.pit(84, 4); L.platform(85, 5, 2); L.put(85, 6, "cc")
+    L.pit(90, 4); L.platform(91, 4, 2); L.put(91, 5, "cc")
+    L.put(97, FLOOR, "w")
+    L.put(100, 5, "BMB"); L.put(104, FLOOR, "e"); L.put(106, FLOOR, "e")
+    L.put(110, FLOOR, "K")
+    L.put(114, 5, "BBBBBB"); L.coins(114, 6, 6); L.put(116, 9, "?"); L.put(115, FLOOR, "e"); L.put(118, FLOOR, "e")
+    L.stairs_up(123, 3); L.pit(126, 2); L.put(126, 8, "f"); L.stairs_down(128, 3)
+    L.pipe(136, 2); L.put(139, FLOOR, "e"); L.pipe(142, 3); L.put(145, FLOOR, "e"); L.pipe(148, 4)
+    L.pit(153, 3); L.put(154, 5, "f"); L.coins(153, 8, 3)
+    L.put(159, 5, "?M?"); L.put(162, FLOOR, "e"); L.put(164, FLOOR, "e"); L.put(166, FLOOR, "e")
+    L.stairs_up(170, 4); L.pit(174, 2); L.stairs_up(176, 6); L.column(182, 8); L.column(181, 7)
+    L.put(194, FLOOR, "F")
+    L.put(198, FLOOR, "d"); L.put(202, FLOOR, "n"); L.put(206, FLOOR, "r")
+    return L
+
+
+def level6():
+    L = Level("Crystal Caverns", "cave", 340, 232)
+    L.put(3, FLOOR, "P"); L.put(1, FLOOR, "w"); L.put(8, FLOOR, "d")
+    L.put(13, 5, "M"); L.put(16, 5, "B?B?B"); L.put(18, 9, "?")
+    L.pit(26, 4); L.put(27, 4, "f"); L.coins(26, 8, 4)
+    L.put(33, FLOOR, "e"); L.put(35, FLOOR, "e")
+    L.pipe(38, 3); L.put(42, 8, "f"); L.pipe(45, 4)
+    L.put(50, FLOOR, "e"); L.put(52, FLOOR, "e"); L.put(54, FLOOR, "e")
+    L.put(49, 5, "BBBBBB"); L.put(51, 9, "?B?")
+    L.pit(59, 4); L.platform(60, 5, 2); L.put(60, 6, "cc")
+    L.stairs_up(68, 4); L.column(72, 4); L.column(73, 4); L.pit(74, 2); L.put(74, 9, "f"); L.stairs_down(76, 4)
+    L.put(81, FLOOR, "r")
+    L.platform(82, 5, 3); L.put(83, 6, "e"); L.platform(89, 8, 4); L.coins(89, 9, 4); L.pit(87, 4)
+    L.put(95, FLOOR, "e"); L.put(97, FLOOR, "e")
+    L.put(100, 5, "?M?"); L.put(104, FLOOR, "e")
+    L.put(108, FLOOR, "K")
+    L.put(112, 5, "BBB?BBB"); L.put(115, 9, "?"); L.put(113, 6, "e"); L.put(117, 6, "e")
+    L.put(121, FLOOR, "e"); L.put(123, FLOOR, "e"); L.put(125, FLOOR, "e")
+    L.pit(129, 4); L.platform(130, 5, 1); L.platform(132, 7, 1); L.put(132, 8, "c")
+    L.pipe(137, 2); L.put(141, FLOOR, "e"); L.pipe(144, 3); L.put(148, FLOOR, "e"); L.pipe(151, 4)
+    L.put(156, 7, "f")
+    L.pit(159, 4); L.put(160, 5, "f"); L.coins(159, 8, 4)
+    L.put(166, 5, "?B?B?"); L.put(168, 9, "M")
+    L.put(167, FLOOR, "e"); L.put(169, FLOOR, "e"); L.put(171, FLOOR, "e")
+    L.stairs_up(176, 4); L.pit(180, 2); L.stairs_up(182, 4, base=FLOOR); L.pit(186, 2)
+    L.stairs_up(188, 8); L.column(196, 8)
+    L.put(208, FLOOR, "F")
+    L.put(212, FLOOR, "d"); L.put(216, FLOOR, "n"); L.put(220, FLOOR, "w"); L.put(224, FLOOR, "r")
+    return L
+
+
 if __name__ == "__main__":
-    for i, lv in enumerate([level1(), level2(), level3()], start=1):
+    for i, lv in enumerate([level1(), level2(), level3(), level4(), level5(), level6()], start=1):
         lv.write(i)

@@ -110,3 +110,8 @@ InitTestScene*.unity*
 /Builds/
 *.slnx
 .vscode/
+
+# Art pipeline scratch
+Tools/ArtPipeline/__pycache__/
+Tools/ArtPipeline/previews/
+Tools/ArtPipeline/logs/

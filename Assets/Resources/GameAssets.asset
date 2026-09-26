@@ -52,20 +52,68 @@ MonoBehaviour:
     skyColor: {r: 0.56, g: 0.8, b: 1, a: 1}
     terrainTint: {r: 1, g: 1, b: 1, a: 1}
     music: {fileID: 8300000, guid: afd302d3f4b1e4a609d8891ebc228e59, type: 3}
+    tileGrass: {fileID: 0}
+    tileDirt: {fileID: 0}
+    bush: {fileID: 0}
+    flowers: {fileID: 0}
+    reeds: {fileID: 0}
   - id: sunset
     background: {fileID: 21300000, guid: 2c3dd5b50fb594254965c4acea23ac76, type: 3}
     skyColor: {r: 1, g: 0.66, b: 0.5, a: 1}
     terrainTint: {r: 1, g: 0.88, b: 0.8, a: 1}
     music: {fileID: 8300000, guid: 5cdf32181c63a40e6839c762788f4e2c, type: 3}
+    tileGrass: {fileID: 0}
+    tileDirt: {fileID: 0}
+    bush: {fileID: 0}
+    flowers: {fileID: 0}
+    reeds: {fileID: 0}
   - id: twilight
     background: {fileID: 21300000, guid: 54bc59bbc38ee41319a6e7858fc0bd87, type: 3}
     skyColor: {r: 0.16, g: 0.16, b: 0.36, a: 1}
     terrainTint: {r: 0.72, g: 0.76, b: 0.95, a: 1}
     music: {fileID: 8300000, guid: ea118fcbd22fa4a098ad8b183e9950da, type: 3}
+    tileGrass: {fileID: 0}
+    tileDirt: {fileID: 0}
+    bush: {fileID: 0}
+    flowers: {fileID: 0}
+    reeds: {fileID: 0}
+  - id: autumn
+    background: {fileID: 21300000, guid: f34991cb6c4914585b5d1a6b6c1ad4f8, type: 3}
+    skyColor: {r: 0.98, g: 0.86, b: 0.68, a: 1}
+    terrainTint: {r: 1, g: 0.94, b: 0.86, a: 1}
+    music: {fileID: 8300000, guid: d6147c932f8ea443fb917f31844d529f, type: 3}
+    tileGrass: {fileID: 0}
+    tileDirt: {fileID: 0}
+    bush: {fileID: 21300000, guid: d486b884d84a94d0980f8590d5ad21d3, type: 3}
+    flowers: {fileID: 21300000, guid: 3fea3ae5a97d94b5690dd05133c38705, type: 3}
+    reeds: {fileID: 21300000, guid: 4d90e48cda96c4b7ab4fd94c15488c2e, type: 3}
+  - id: snow
+    background: {fileID: 21300000, guid: 067b2ad0c3a3b4c7cabe85dbcbf4135c, type: 3}
+    skyColor: {r: 0.8, g: 0.9, b: 1, a: 1}
+    terrainTint: {r: 0.95, g: 0.97, b: 1, a: 1}
+    music: {fileID: 8300000, guid: 53cfe8f979b6d4dbbbeb7e327a1d8c96, type: 3}
+    tileGrass: {fileID: 21300000, guid: fbe88fd09bd144eebbe6fcb8e0adefdc, type: 3}
+    tileDirt: {fileID: 21300000, guid: 581bc8bbd09e94c82a5126f0655a3b3e, type: 3}
+    bush: {fileID: 21300000, guid: 0592eb3a2c7754507beff732bf795e10, type: 3}
+    flowers: {fileID: 21300000, guid: bbb747aa984c4454b96e26bb017721ed, type: 3}
+    reeds: {fileID: 21300000, guid: 35344fb1ebc614412a4ac54da37050f3, type: 3}
+  - id: cave
+    background: {fileID: 21300000, guid: 58965e147a9804eb8a51a2acbb5f5fd7, type: 3}
+    skyColor: {r: 0.1, g: 0.08, b: 0.2, a: 1}
+    terrainTint: {r: 0.86, g: 0.84, b: 1, a: 1}
+    music: {fileID: 8300000, guid: f25ca3021aed74a6684974eb0ab54e2f, type: 3}
+    tileGrass: {fileID: 21300000, guid: c4548f2cb89c340cf92bc242414e3d9d, type: 3}
+    tileDirt: {fileID: 21300000, guid: 11fe14e06c104426dbf4c9c223f4255d, type: 3}
+    bush: {fileID: 21300000, guid: 91120e24aca6448d0bb3b9174b3c1088, type: 3}
+    flowers: {fileID: 21300000, guid: 6f42836557da24b62b8a68da6abf3f83, type: 3}
+    reeds: {fileID: 21300000, guid: b6953439d816542a0b4d393d3cb9715e, type: 3}
   levels:
   - {fileID: 4900000, guid: ae5a4c630116d444b813df53a65b6502, type: 3}
   - {fileID: 4900000, guid: 91601d5dcca3448888d8392f47a2b6ba, type: 3}
   - {fileID: 4900000, guid: f5a66294c27794dbebc61e2b2a21f366, type: 3}
+  - {fileID: 4900000, guid: e39864aadcdf042739d7b5c37fc66d24, type: 3}
+  - {fileID: 4900000, guid: 06bfcf321f13f472b9dffc1953ed9521, type: 3}
+  - {fileID: 4900000, guid: 6b793add7fe154722ad125964c6d058a, type: 3}
   uiLayout: {fileID: 9197481963319205126, guid: c00966d06f5a940cb9d507b0e759530c, type: 3}
   panelSettings: {fileID: 11400000, guid: c10fb71d171d14642b05297f236c46ce, type: 2}
   font: {fileID: 12800000, guid: 7c487e9f77aab43d085e61b0fd5cec0e, type: 3}

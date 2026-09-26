@@ -189,6 +189,9 @@ namespace SuperOttie.Editor
                 Theme("day", "bg_day", new Color(0.56f, 0.8f, 1f), "music_level1", Color.white),
                 Theme("sunset", "bg_sunset", new Color(1f, 0.66f, 0.5f), "music_level2", new Color(1f, 0.88f, 0.8f)),
                 Theme("twilight", "bg_twilight", new Color(0.16f, 0.16f, 0.36f), "music_level3", new Color(0.72f, 0.76f, 0.95f)),
+                Theme("autumn", "bg_autumn", new Color(0.98f, 0.86f, 0.68f), "music_level4", new Color(1f, 0.94f, 0.86f), decor: "autumn"),
+                Theme("snow", "bg_snow", new Color(0.8f, 0.9f, 1f), "music_level5", new Color(0.95f, 0.97f, 1f), tiles: "snow", decor: "snow"),
+                Theme("cave", "bg_cave", new Color(0.1f, 0.08f, 0.2f), "music_level6", new Color(0.86f, 0.84f, 1f), tiles: "cave", decor: "cave"),
             };
 
             a.levels = Directory.GetFiles("Assets/Levels", "level*.txt").OrderBy(p => p, StringComparer.Ordinal)
@@ -235,14 +238,25 @@ namespace SuperOttie.Editor
             _ => 1f,
         };
 
-        static ThemeDefinition Theme(string id, string background, Color sky, string music, Color tint) => new ThemeDefinition
+        /// <param name="tiles">Suffix of theme ground tiles (tile_grass_{tiles}.png, tile_dirt_{tiles}.png), or null for the shared ones.</param>
+        /// <param name="decor">Suffix of theme scenery (bush_, flowers_, reeds_{decor}.png), or null for the shared ones.</param>
+        static ThemeDefinition Theme(string id, string background, Color sky, string music, Color tint, string tiles = null, string decor = null)
         {
-            terrainTint = tint,
-            id = id,
-            background = S(Art + $"Backgrounds/{background}.png"),
-            skyColor = sky,
-            music = Clip($"Music/{music}.wav"),
-        };
+            const string sp = Art + "Sprites/";
+            return new ThemeDefinition
+            {
+                terrainTint = tint,
+                id = id,
+                background = S(Art + $"Backgrounds/{background}.png"),
+                skyColor = sky,
+                music = Clip($"Music/{music}.wav"),
+                tileGrass = tiles == null ? null : S(sp + $"Tiles/tile_grass_{tiles}.png"),
+                tileDirt = tiles == null ? null : S(sp + $"Tiles/tile_dirt_{tiles}.png"),
+                bush = decor == null ? null : S(sp + $"Decor/bush_{decor}.png"),
+                flowers = decor == null ? null : S(sp + $"Decor/flowers_{decor}.png"),
+                reeds = decor == null ? null : S(sp + $"Decor/reeds_{decor}.png"),
+            };
+        }
 
         static Sprite S(string path)
         {

@@ -1,5 +1,8 @@
 # Super Ottie art prompts
 
+Courses 4-6 (autumn, snow, cave: `bg_*`, `tiles_*`, `decor_*`) were generated with `./gen.sh <name>` from the
+matching files in `prompts/`; run `process.py <name>` afterwards.
+
 Generate each image in ChatGPT, download it, and save it into `~/Develop/ottie-art/raw/` with the exact file name shown.
 For the three prompts marked **attach reference**, attach `~/Develop/ottie-art/ottie_reference.jpg` (the Ottie photo) to the message.
 White backgrounds are expected; I remove them afterwards.
