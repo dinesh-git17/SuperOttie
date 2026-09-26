@@ -9,6 +9,8 @@ namespace SuperOttie.Editor
     /// Pins Xcode build settings that break Unity projects when Xcode's "Update to recommended settings"
     /// turns them on: user script sandboxing blocks the IL2CPP run-script phase from loading its tools,
     /// and the module verifier rejects UnityFramework's umbrella header.
+    /// Also declares that the app uses no non-exempt encryption, so TestFlight builds skip the
+    /// export-compliance question.
     /// </summary>
     public static class XcodeProjectFixups
     {
@@ -31,6 +33,12 @@ namespace SuperOttie.Editor
                 foreach (var (key, value) in Settings) proj.SetBuildProperty(guid, key, value);
             }
             File.WriteAllText(projPath, proj.WriteToString());
+
+            string plistPath = Path.Combine(path, "Info.plist");
+            var plist = new PlistDocument();
+            plist.ReadFromFile(plistPath);
+            plist.root.SetBoolean("ITSAppUsesNonExemptEncryption", false);
+            plist.WriteToFile(plistPath);
         }
     }
 }

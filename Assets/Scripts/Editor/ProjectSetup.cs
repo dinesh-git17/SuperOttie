@@ -82,7 +82,9 @@ namespace SuperOttie.Editor
             PlayerSettings.productName = ProductName;
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.iOS, BundleId);
             PlayerSettings.bundleVersion = "1.0";
-            PlayerSettings.iOS.buildNumber = "1";
+            // Each App Store Connect upload needs a higher build number; release scripts pass one in.
+            string buildNumber = Environment.GetEnvironmentVariable("OTTIE_BUILD_NUMBER");
+            PlayerSettings.iOS.buildNumber = string.IsNullOrWhiteSpace(buildNumber) ? "1" : buildNumber.Trim();
 
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
             PlayerSettings.allowedAutorotateToPortrait = false;
