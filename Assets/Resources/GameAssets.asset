@@ -114,6 +114,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: e39864aadcdf042739d7b5c37fc66d24, type: 3}
   - {fileID: 4900000, guid: 06bfcf321f13f472b9dffc1953ed9521, type: 3}
   - {fileID: 4900000, guid: 6b793add7fe154722ad125964c6d058a, type: 3}
+  wordList: {fileID: 4900000, guid: a06e2722cbd5f40aeb2ef9993c0eedde, type: 3}
   uiLayout: {fileID: 9197481963319205126, guid: c00966d06f5a940cb9d507b0e759530c, type: 3}
   panelSettings: {fileID: 11400000, guid: c10fb71d171d14642b05297f236c46ce, type: 2}
   font: {fileID: 12800000, guid: 7c487e9f77aab43d085e61b0fd5cec0e, type: 3}

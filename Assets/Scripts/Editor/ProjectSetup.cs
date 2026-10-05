@@ -197,6 +197,7 @@ namespace SuperOttie.Editor
             a.levels = Directory.GetFiles("Assets/Levels", "level*.txt").OrderBy(p => p, StringComparer.Ordinal)
                 .Select(p => AssetDatabase.LoadAssetAtPath<TextAsset>(p.Replace('\\', '/'))).ToArray();
             if (a.levels.Length == 0) Problems.Add("No levels in Assets/Levels");
+            a.wordList = Load<TextAsset>("Assets/Data/words.txt");
 
             a.uiLayout = Load<VisualTreeAsset>("Assets/UI/Game.uxml");
             a.panelSettings = panel;

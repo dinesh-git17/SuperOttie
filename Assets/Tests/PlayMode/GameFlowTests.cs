@@ -5,6 +5,8 @@ using SuperOttie.Core;
 using SuperOttie.Game;
 using SuperOttie.Input;
 using SuperOttie.UI;
+using SuperOttie.WordHunt;
+using System.Linq;
 using SuperOttie.Level;
 using SuperOttie.View;
 using UnityEngine;
@@ -16,21 +18,29 @@ namespace SuperOttie.Tests
 {
     public class GameFlowTests
     {
-        // These tests run the real game, which saves progress to PlayerPrefs; keep the editor's own progress intact.
-        int? _savedProgress;
+        // These tests run the real game, which saves progress and the best score to PlayerPrefs; keep the editor's own intact.
+        const string HighScoreKey = "superottie.highscore";
+        static readonly string[] SavedKeys = { PlayerPrefsCourseProgressStore.Key, HighScoreKey };
+        readonly int?[] _saved = new int?[SavedKeys.Length];
 
         [SetUp]
         public void SaveProgress()
         {
-            _savedProgress = PlayerPrefs.HasKey(PlayerPrefsCourseProgressStore.Key) ? PlayerPrefs.GetInt(PlayerPrefsCourseProgressStore.Key) : (int?)null;
-            PlayerPrefs.DeleteKey(PlayerPrefsCourseProgressStore.Key);
+            for (int i = 0; i < SavedKeys.Length; i++)
+            {
+                _saved[i] = PlayerPrefs.HasKey(SavedKeys[i]) ? PlayerPrefs.GetInt(SavedKeys[i]) : (int?)null;
+                PlayerPrefs.DeleteKey(SavedKeys[i]);
+            }
         }
 
         [TearDown]
         public void RestoreProgress()
         {
-            if (_savedProgress.HasValue) PlayerPrefs.SetInt(PlayerPrefsCourseProgressStore.Key, _savedProgress.Value);
-            else PlayerPrefs.DeleteKey(PlayerPrefsCourseProgressStore.Key);
+            for (int i = 0; i < SavedKeys.Length; i++)
+            {
+                if (_saved[i].HasValue) PlayerPrefs.SetInt(SavedKeys[i], _saved[i].Value);
+                else PlayerPrefs.DeleteKey(SavedKeys[i]);
+            }
             Time.timeScale = 1f;
         }
 
@@ -153,6 +163,73 @@ namespace SuperOttie.Tests
             menu.Handle(GameUI.Screen.Courses, MenuCommand.Submit); // no highlight yet: the gold course
             Assert.That(game.Current, Is.EqualTo(GameManager.Phase.Intro));
             Assert.That(game.Session.LevelIndex, Is.EqualTo(1));
+        }
+
+        /// <summary>Starts course 1 and loses the last life.</summary>
+        static IEnumerator RunOutOfLives(GameManager game)
+        {
+            game.StartNewGame();
+            yield return WaitForPlaying(game);
+            while (game.Session.Lives > 1) game.Session.LoseLife();
+            game.Level.Player.Die();
+            float deadline = Time.realtimeSinceStartup + 8f;
+            while (game.Current != GameManager.Phase.OutOfLives && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(game.Current, Is.EqualTo(GameManager.Phase.OutOfLives), "losing the last life offers Word Hunt");
+        }
+
+        [UnityTest]
+        public IEnumerator OutOfLives_WinningWordHunt_ContinuesTheSameCourse_WithTheScoreKept()
+        {
+            GameManager game = null;
+            yield return BootToMenu(g => game = g);
+            yield return RunOutOfLives(game);
+            game.Session.AddScore(1234);
+            int scoreBefore = game.Session.Score;
+
+            Menu(game).Handle(GameUI.Screen.OutOfLives, MenuCommand.Submit); // Word Hunt is the default choice
+            Assert.That(game.Current, Is.EqualTo(GameManager.Phase.WordHunt));
+            var round = game.WordHuntRound;
+            Assert.That(round.TimeLeft, Is.EqualTo(WordHuntRound.DefaultTimeLimit));
+
+            var words = GridSolver.FindAll(round.Grid, WordHuntController.LoadWords(GameAssets.Load())).Take(3).ToList();
+            Assert.That(words.Count, Is.EqualTo(3), round.Grid.ToRows());
+            foreach (var w in words) Assert.That(round.SubmitTyped(w), Is.EqualTo(SubmitResult.Found), w);
+            Assert.That(round.IsWon, Is.True);
+
+            yield return null;
+            Assert.That(game.Session.Lives, Is.EqualTo(1), "one life won");
+            float deadline = Time.realtimeSinceStartup + 8f;
+            while (game.Current != GameManager.Phase.Playing && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(game.Current, Is.EqualTo(GameManager.Phase.Playing));
+            Assert.That(game.Session.LevelIndex, Is.Zero, "back into the same course");
+            Assert.That(game.Session.Lives, Is.EqualTo(1));
+            Assert.That(game.Session.Score, Is.GreaterThanOrEqualTo(scoreBefore), "the run's score is kept");
+        }
+
+        [UnityTest]
+        public IEnumerator OutOfLives_MainMenu_KeepsTheBestScore()
+        {
+            GameManager game = null;
+            yield return BootToMenu(g => game = g);
+            yield return RunOutOfLives(game);
+            game.Session.AddScore(4321);
+            game.LeaveToMenu();
+            Assert.That(game.Current, Is.EqualTo(GameManager.Phase.Title));
+            Assert.That(PlayerPrefs.GetInt(HighScoreKey), Is.GreaterThanOrEqualTo(4321));
+        }
+
+        [UnityTest]
+        public IEnumerator WordHunt_TimeRunningOut_EndsInGameOver()
+        {
+            GameManager game = null;
+            yield return BootToMenu(g => game = g);
+            yield return RunOutOfLives(game);
+            game.PlayWordHunt();
+            game.WordHuntRound.Tick(WordHuntRound.DefaultTimeLimit + 1f);
+            float deadline = Time.realtimeSinceStartup + 6f;
+            while (game.Current != GameManager.Phase.GameOver && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(game.Current, Is.EqualTo(GameManager.Phase.GameOver));
+            Assert.That(game.Session.Lives, Is.Zero);
         }
 
         [UnityTest]

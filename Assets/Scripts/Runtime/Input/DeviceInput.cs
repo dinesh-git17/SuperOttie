@@ -37,6 +37,19 @@ namespace SuperOttie.Input
             }
         }
 
+        /// <summary>Where the first finger (or the held mouse button) is, in screen pixels (bottom-left origin).</summary>
+        public bool TryGetPointer(out Vector2 screenPosition)
+        {
+            Refresh();
+            if (_touches.Count > 0)
+            {
+                screenPosition = _touches[0].Position;
+                return true;
+            }
+            screenPosition = default;
+            return false;
+        }
+
         /// <summary>State of the on-screen stick and jump button this frame (for drawing them).</summary>
         public TouchButtons CurrentTouchButtons
         {

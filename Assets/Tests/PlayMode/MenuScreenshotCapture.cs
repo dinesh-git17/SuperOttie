@@ -6,6 +6,8 @@ using SuperOttie.Core;
 using SuperOttie.Game;
 using SuperOttie.Input;
 using SuperOttie.UI;
+using SuperOttie.WordHunt;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -14,7 +16,8 @@ using UnityEngine.UIElements;
 namespace SuperOttie.Tests
 {
     /// <summary>
-    /// Visual QA helper (not part of the normal run): renders the main menu and course select at iPhone 17 Pro
+    /// Visual QA helper (not part of the normal run): renders the main menu, course select, out-of-lives offer and
+    /// a Word Hunt round at iPhone 17 Pro
     /// landscape resolution into Logs/Screenshots. Run with -testFilter MenuScreenshotCapture.
     /// </summary>
     [Explicit("Visual QA utility")]
@@ -38,7 +41,8 @@ namespace SuperOttie.Tests
             var panel = Object.FindFirstObjectByType<UIDocument>().panelSettings;
             var rt = new RenderTexture(2622, 1206, 24);
             panel.targetTexture = rt;
-            var menu = ((GameUI)typeof(GameManager).GetField("_ui", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(game)).Menu;
+            var ui = (GameUI)typeof(GameManager).GetField("_ui", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(game);
+            var menu = ui.Menu;
 
             yield return Capture(rt, "menu_title");
             menu.Handle(GameUI.Screen.Title, MenuCommand.Down);
@@ -51,6 +55,26 @@ namespace SuperOttie.Tests
             menu.Handle(GameUI.Screen.Courses, MenuCommand.Right);
             menu.Handle(GameUI.Screen.Courses, MenuCommand.Right);
             yield return Capture(rt, "menu_courses_focus");
+
+            // Out of lives, then a Word Hunt round with one word found and a second being traced.
+            game.GoToTitle();
+            game.StartNewGame();
+            while (game.Current != GameManager.Phase.Playing) yield return null;
+            while (game.Session.Lives > 1) game.Session.LoseLife();
+            game.Session.AddScore(12450);
+            game.Level.Player.Die();
+            while (game.Current != GameManager.Phase.OutOfLives) yield return null;
+            yield return Capture(rt, "outoflives");
+
+            game.PlayWordHunt();
+            var round = game.WordHuntRound;
+            var words = GridSolver.FindAll(round.Grid, WordHuntController.LoadWords(GameAssets.Load()));
+            round.SubmitTyped(words.First(w => w.Length == 4));
+            round.Tick(23f);
+            var tracing = words.Where(w => w.Length == 5).DefaultIfEmpty(words.Last()).First();
+            foreach (int cell in round.Grid.FindPath(tracing)) round.Touch(cell);
+            ui.WordHunt.ShowPath(round.Path, round.State, round.CurrentWord);
+            yield return Capture(rt, "wordhunt");
 
             panel.targetTexture = null;
             rt.Release();

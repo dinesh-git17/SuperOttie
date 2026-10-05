@@ -82,6 +82,10 @@ namespace SuperOttie.Game
         public ThemeDefinition[] themes = Array.Empty<ThemeDefinition>();
         public TextAsset[] levels = Array.Empty<TextAsset>();
 
+        [Header("Word Hunt")]
+        [Tooltip("One word per line, sorted (built by Tools/WordList/make_wordlist.py).")]
+        public TextAsset wordList;
+
         [Header("UI")]
         public VisualTreeAsset uiLayout;
         public PanelSettings panelSettings;

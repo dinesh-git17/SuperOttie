@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using SuperOttie.Audio;
@@ -6,14 +7,16 @@ using SuperOttie.Input;
 using SuperOttie.Level;
 using SuperOttie.UI;
 using SuperOttie.View;
+using SuperOttie.WordHunt;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SuperOttie.Game
 {
     /// <summary>
-    /// Top-level game flow: main menu, course select, level intro card, play, pause, death, course clear,
-    /// game over and the final victory screen. Owns the session, saved progress, the current level and the UI.
+    /// Top-level game flow: main menu, course select, level intro card, play, pause, death, out of lives
+    /// (Word Hunt for an extra life), course clear, game over and the final victory screen. Owns the session,
+    /// saved progress, the current level and the UI.
     /// </summary>
     public sealed class GameManager : MonoBehaviour
     {
@@ -26,12 +29,15 @@ namespace SuperOttie.Game
             Playing,
             Paused,
             Dying,
+            OutOfLives,
+            WordHunt,
             LevelClear,
             GameOver,
             Victory,
         }
 
         const float IntroSeconds = 2.2f;
+        const float WordHuntOutcomeSeconds = 2f;
         const int TimeBonusPerUnit = 50;
 
         [SerializeField] GameAssets assets;
@@ -47,6 +53,7 @@ namespace SuperOttie.Game
         LevelData[] _levels;
         DeviceInput _input;
         GameUI _ui;
+        WordHuntController _wordHunt;
         LevelTimer _timer;
         LevelContext _ctx;
         BuiltLevel _level;
@@ -60,6 +67,9 @@ namespace SuperOttie.Game
 
         /// <summary>Cleared and unlocked courses, saved whenever a course is cleared for the first time.</summary>
         public CourseProgress Progress { get; private set; }
+
+        /// <summary>The Word Hunt round in progress (or the last one played).</summary>
+        public WordHuntRound WordHuntRound => _wordHunt.Round;
 
         void Awake()
         {
@@ -86,6 +96,12 @@ namespace SuperOttie.Game
             menu.BackRequested += BackToMenu;
             menu.SoundToggleRequested += ToggleSound;
             menu.LockedCourseChosen += () => audioManager.Play(Sfx.Bump);
+            menu.WordHuntRequested += PlayWordHunt;
+            menu.OfferMenuRequested += LeaveToMenu;
+
+            _wordHunt = new WordHuntController(assets, _ui.WordHunt, _input, audioManager, _ui.ScreenToPanel);
+            _wordHunt.WordScored += points => _session.AddScore(points);
+            _wordHunt.Finished += won => RunFlow(won ? AfterWordHuntWin() : AfterWordHuntLoss());
             _session.ExtraLife += () => audioManager.Play(Sfx.OneUp);
         }
 
@@ -104,6 +120,7 @@ namespace SuperOttie.Game
             {
                 case Phase.Title:
                 case Phase.Courses:
+                case Phase.OutOfLives:
                     var command = _input.ReadMenuCommand();
                     if (command != MenuCommand.None && _ui.Menu.Handle(_ui.Current, command)) audioManager.Play(Sfx.UiTap);
                     break;
@@ -117,6 +134,9 @@ namespace SuperOttie.Game
                     break;
                 case Phase.Paused:
                     if (_input.PauseKeyPressed()) Resume();
+                    break;
+                case Phase.WordHunt:
+                    _wordHunt.Tick(Time.deltaTime);
                     break;
             }
 
@@ -173,6 +193,7 @@ namespace SuperOttie.Game
             if (_flow != null) StopCoroutine(_flow);
             _flow = null;
             Time.timeScale = 1f;
+            _wordHunt.End();
             CleanupLevel();
             ShowMenu();
             _ui.SetFadeImmediate(0f);
@@ -243,8 +264,57 @@ namespace SuperOttie.Game
             yield return new WaitForSeconds(3f);
             _ui.FadeTo(1f);
             yield return new WaitForSecondsRealtime(0.4f);
-            if (_session.LoseLife()) yield return GameOver();
+            if (_session.LoseLife()) OfferWordHunt();
             else yield return LevelIntro(_session.LevelIndex, _checkpointReached);
+        }
+
+        // ---------------------------------------------------------------- out of lives: Word Hunt for a life
+
+        void OfferWordHunt()
+        {
+            Current = Phase.OutOfLives;
+            CleanupLevel();
+            _ui.Menu.ShowOutOfLives(_session.Score, CurrentBackdrop);
+            _ui.Show(GameUI.Screen.OutOfLives);
+            _ui.FadeTo(0f);
+            audioManager.PlayMusic(assets.musicTitle);
+        }
+
+        Sprite CurrentBackdrop => assets.GetTheme(_levels[_session.LevelIndex].Theme).background;
+
+        public void PlayWordHunt()
+        {
+            if (Current != Phase.OutOfLives) return;
+            Current = Phase.WordHunt;
+            _wordHunt.Begin(Environment.TickCount, CurrentBackdrop);
+            _ui.Show(GameUI.Screen.WordHunt);
+        }
+
+        /// <summary>Out of lives and done: keep the best score and go back to the main menu.</summary>
+        public void LeaveToMenu()
+        {
+            if (Current != Phase.OutOfLives) return;
+            _highScores.Save(_session.Score);
+            GoToTitle();
+        }
+
+        /// <summary>Three words found: one more life, back into the same course (from the checkpoint if reached).</summary>
+        IEnumerator AfterWordHuntWin()
+        {
+            _session.AddLife();
+            yield return new WaitForSeconds(WordHuntOutcomeSeconds);
+            _ui.FadeTo(1f);
+            yield return new WaitForSecondsRealtime(0.45f);
+            yield return LevelIntro(_session.LevelIndex, _checkpointReached);
+        }
+
+        IEnumerator AfterWordHuntLoss()
+        {
+            audioManager.StopMusic();
+            yield return new WaitForSeconds(WordHuntOutcomeSeconds);
+            _ui.FadeTo(1f);
+            yield return new WaitForSecondsRealtime(0.45f);
+            yield return GameOver();
         }
 
         void OnGoalReached(int flagScore)

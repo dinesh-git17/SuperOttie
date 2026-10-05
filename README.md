@@ -12,6 +12,10 @@ starring Ottie, a chubby baby otter with round glasses. Built with Unity 6 (6000
 - Main menu with **New Game** and **Courses**: clearing a course unlocks the next one, and any unlocked course can be
   started from the course select (a fresh run with full lives that carries on through the later courses).
   Progress is saved on the device (`PlayerPrefs`, key `superottie.cleared`)
+- Out of lives? Play **Word Hunt** for another life: an 80-second 4x4 letter grid in the style of the iMessage game.
+  Drag through touching letters (diagonals count); finding 3 words wins a life and puts Ottie back into the same course
+  (from the checkpoint if reached) with the score kept. It can be played every time the lives run out. Words also score
+  points (100 / 400 / 800 / 1400 ...). On a keyboard, type a word and press Enter
 
 ## Controls
 
@@ -21,6 +25,7 @@ starring Ottie, a chubby baby otter with round glasses. Built with Unity 6 (6000
 | Jump (hold for higher) | jump button | Space / Up / W / Z | A |
 | Pause | pause button | Esc / P | Start |
 | Menus | tap a button or course card | arrows / WASD, Enter or Space, Esc to go back | d-pad / stick, A, B to go back |
+| Word Hunt | drag across the letters | type the word, Enter (Backspace / Esc to fix) | (touch or keyboard only) |
 
 ## Build and run on the iOS Simulator
 
@@ -39,7 +44,7 @@ For a real device, run `Super Ottie > Build > iOS Device Xcode Project` in the e
 
 ```bash
 ./run_tests.sh EditMode   # rules, parser, level lint, movement model, touch zones, camera math,
-                          # course unlocks, menu focus
+                          # course unlocks, menu focus, Word Hunt rules, boards, dictionary, tile hit-testing
 ./run_tests.sh PlayMode   # real physics: jumping, blocks, power-ups, stomps, pits, goal, scene flow,
                           # plus an autopilot that must finish every shipped course
 ```
@@ -56,18 +61,21 @@ Visual QA captures (explicit, so they don't run by default) render into `Logs/Sc
 Assets/
   Scripts/Runtime/
     Core/      GameSession, CourseProgress, StompChain, LevelTimer, layers   (pure C#, unit tested)
+    WordHunt/  WordList, LetterGrid + GridSolver + GridGenerator, WordHuntRound (pure C#, unit tested)
     Level/     LevelParser, LevelData, LevelLint, LevelBuilder, LevelContext
     Player/    PlatformerMotor (pure movement model), PlayerController, PlayerVisual
     Entities/  blocks, coins, fish power-up, enemies, flagpole, checkpoint, effects
     Input/     DeviceInput (touch + keyboard + gamepad), TouchZones (thumbstick + jump)
     View/      PlatformerCamera, ParallaxBackground
     Audio/     AudioManager
-    UI/        GameUI (UI Toolkit: Game.uxml / Game.uss), MenuView (main menu + course select), MenuFocus
-    Game/      GameManager (state machine), GameAssets catalogue, RuntimeSettings
+    UI/        GameUI (UI Toolkit: Game.uxml / Game.uss), MenuView (menus), MenuFocus, WordHuntView
+    Game/      GameManager (state machine), WordHuntController, GameAssets catalogue, RuntimeSettings
   Scripts/Editor/  ProjectSetup (layers, player settings, assets, scene), BuildScript, import rules
   Levels/     level1-6.txt, plain-text maps (legend in LevelParser.cs)
+  Data/       words.txt, the Word Hunt dictionary (built by Tools/WordList/make_wordlist.py)
   Art/ Audio/ Fonts/ UI/
 Tools/ArtPipeline/   image generation prompts and the cut-out/slicing pipeline
+Tools/WordList/      ENABLE source list, blocklist and the script that builds Assets/Data/words.txt
 ```
 
 Design notes:
@@ -80,6 +88,9 @@ Design notes:
   feeds it physics results.
 - **Interactions use explicit overlap queries**, not collision callbacks, so a stomp versus a hit is
   decided the same way every frame.
+- **Word Hunt boards are never duds.** Boards are rolled from 16 classic letter dice and solved against the
+  dictionary (depth-first search pruned by prefix lookups in a sorted word array); a board needs at least 40 words.
+  The dictionary is ENABLE, 3 to 12 letters, minus `Tools/WordList/blocklist.txt` (slurs, sexual terms, profanity).
 - **Everything is reproducible.** `Super Ottie > Setup Project` (or `ProjectSetup.RunFromCommandLine`)
   rebuilds the scene, the asset catalogue and the player settings from the files on disk.
 

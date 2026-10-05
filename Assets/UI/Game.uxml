@@ -79,6 +79,59 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
+        <!-- Out of lives: Word Hunt for a life, or back to the main menu. -->
+        <ui:VisualElement name="outoflives" class="screen" picking-mode="Ignore">
+            <ui:VisualElement name="outoflives-art" class="fill title-art" picking-mode="Ignore" />
+            <ui:VisualElement class="fill courses-dim" picking-mode="Ignore" />
+            <ui:VisualElement class="fill safe-area offer-layout" picking-mode="Ignore">
+                <ui:VisualElement class="offer-panel" picking-mode="Ignore">
+                    <ui:VisualElement name="offer-ottie" class="offer-ottie" picking-mode="Ignore" />
+                    <ui:VisualElement class="offer-column" picking-mode="Ignore">
+                        <ui:Label text="Out of lives!" class="offer-title" picking-mode="Ignore" />
+                        <ui:Label name="offer-score" text="Score 000000" class="offer-score" picking-mode="Ignore" />
+                        <ui:Label text="Find 3 words in Word Hunt to win a life and keep going" class="offer-text" picking-mode="Ignore" />
+                        <ui:VisualElement name="offer-play" class="menu-btn menu-btn-primary" picking-mode="Ignore">
+                            <ui:Label text="Play Word Hunt" class="menu-btn-text" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="offer-menu" class="menu-btn menu-btn-secondary" picking-mode="Ignore">
+                            <ui:Label text="Main menu" class="menu-btn-text" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Word Hunt: clock and found words on the left, the 4x4 board in the middle, Ottie cheering on the right. -->
+        <ui:VisualElement name="wordhunt" class="screen" picking-mode="Ignore">
+            <ui:VisualElement name="wordhunt-art" class="fill title-art" picking-mode="Ignore" />
+            <ui:VisualElement class="fill wordhunt-dim" picking-mode="Ignore" />
+            <ui:VisualElement class="fill safe-area wordhunt-layout" picking-mode="Ignore">
+                <ui:VisualElement class="wordhunt-side" picking-mode="Ignore">
+                    <ui:Label text="Word Hunt" class="wordhunt-title" picking-mode="Ignore" />
+                    <ui:Label name="wordhunt-time" text="1:20" class="wordhunt-time" picking-mode="Ignore" />
+                    <ui:VisualElement class="wordhunt-timebar" picking-mode="Ignore">
+                        <ui:VisualElement name="wordhunt-timefill" class="wordhunt-timefill" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:Label text="Find 3 words to win a life" class="wordhunt-goal" picking-mode="Ignore" />
+                    <ui:VisualElement name="wordhunt-slots" class="wordhunt-slots" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="wordhunt-main" picking-mode="Ignore">
+                    <ui:VisualElement name="wordhunt-bubble" class="wordhunt-bubble" picking-mode="Ignore">
+                        <ui:Label name="wordhunt-word" text="" class="wordhunt-word" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="wordhunt-board" class="wordhunt-board" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="wordhunt-side wordhunt-right" picking-mode="Ignore">
+                    <ui:VisualElement name="wordhunt-ottie" class="wordhunt-ottie" picking-mode="Ignore" />
+                    <ui:Label name="wordhunt-points" text="0 points" class="wordhunt-points" picking-mode="Ignore" />
+                    <ui:Label text="Drag across letters that touch. Diagonals count!" class="wordhunt-hint" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="wordhunt-result" class="fill wordhunt-result" picking-mode="Ignore">
+                <ui:Label name="wordhunt-result-text" text="You won a life!" class="wordhunt-result-text" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
         <ui:VisualElement name="intro" class="screen screen-dark" picking-mode="Ignore">
             <ui:Label name="intro-world" text="WORLD 1-1" class="big-text" picking-mode="Ignore" />
             <ui:Label name="intro-name" text="Sunny Meadow" class="mid-text" picking-mode="Ignore" />

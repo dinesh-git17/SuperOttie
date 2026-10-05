@@ -536,3 +536,275 @@ Label {
     color: rgb(255, 255, 255);
     -unity-text-outline-width: 4px;
 }
+
+/* ---------- Out of lives ---------- */
+
+.offer-layout {
+    align-items: center;
+    justify-content: center;
+}
+
+.offer-panel {
+    flex-direction: row;
+    align-items: center;
+    padding: 50px 80px 40px 50px;
+    border-radius: 48px;
+    border-width: 7px;
+    border-color: rgb(255, 214, 64);
+    background-color: rgba(60, 38, 22, 0.95);
+}
+
+.offer-ottie {
+    width: 420px;
+    height: 420px;
+    margin-right: 50px;
+    background-size: contain;
+}
+
+.offer-column {
+    align-items: center;
+}
+
+.offer-title {
+    font-size: 110px;
+    color: rgb(255, 214, 64);
+}
+
+.offer-score {
+    font-size: 56px;
+    color: rgb(255, 236, 170);
+    margin-bottom: 12px;
+}
+
+.offer-text {
+    width: 640px;
+    font-size: 42px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-bottom: 36px;
+}
+
+/* ---------- Word Hunt ---------- */
+
+.wordhunt-dim {
+    background-color: rgba(24, 16, 12, 0.78);
+}
+
+.wordhunt-layout {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.wordhunt-side {
+    width: 500px;
+    align-items: center;
+}
+
+.wordhunt-title {
+    font-size: 76px;
+    color: rgb(255, 214, 64);
+}
+
+.wordhunt-time {
+    font-size: 150px;
+    letter-spacing: 4px;
+}
+
+.wordhunt-time-low {
+    color: rgb(255, 110, 90);
+}
+
+.wordhunt-timebar {
+    width: 400px;
+    height: 30px;
+    margin: 6px 0 34px 0;
+    border-radius: 15px;
+    border-width: 4px;
+    border-color: rgb(59, 36, 20);
+    background-color: rgba(255, 243, 214, 0.25);
+    overflow: hidden;
+}
+
+.wordhunt-timefill {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(120, 200, 90);
+}
+
+.wordhunt-timefill.wordhunt-time-low {
+    background-color: rgb(240, 90, 70);
+}
+
+.wordhunt-goal {
+    font-size: 40px;
+    color: rgb(255, 236, 170);
+    margin-bottom: 16px;
+}
+
+.wh-slot {
+    width: 420px;
+    height: 96px;
+    margin-bottom: 16px;
+    padding: 0 26px 0 14px;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 48px;
+    border-width: 5px;
+    border-color: rgba(255, 243, 214, 0.35);
+    background-color: rgba(255, 243, 214, 0.08);
+}
+
+.wh-slot-star {
+    width: 70px;
+    height: 70px;
+    margin-right: 18px;
+    background-size: contain;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.25);
+}
+
+.wh-slot-word {
+    font-size: 54px;
+    color: rgba(255, 243, 214, 0.45);
+}
+
+.wh-slot-filled {
+    border-color: rgb(255, 214, 64);
+    background-color: rgba(255, 214, 64, 0.18);
+}
+
+.wh-slot-filled .wh-slot-star {
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.wh-slot-filled .wh-slot-word {
+    color: rgb(255, 255, 255);
+}
+
+.wordhunt-main {
+    align-items: center;
+    margin: 0 40px;
+}
+
+.wordhunt-bubble {
+    min-width: 260px;
+    height: 108px;
+    margin-bottom: 18px;
+    padding: 0 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 54px;
+    border-width: 6px;
+    border-color: rgb(59, 36, 20);
+    background-color: rgb(255, 243, 214);
+    opacity: 0;
+}
+
+.wordhunt-word {
+    font-size: 70px;
+    letter-spacing: 6px;
+    color: rgb(92, 56, 30);
+    -unity-text-outline-width: 0;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.wh-state-new {
+    background-color: rgb(140, 214, 100);
+}
+
+.wh-state-found {
+    background-color: rgb(255, 214, 64);
+}
+
+.wh-state-bad {
+    background-color: rgb(250, 130, 110);
+}
+
+/* The board's size and the tile positions are set in code from WordHuntView's constants. */
+.wordhunt-board {
+    border-radius: 44px;
+    border-width: 7px;
+    border-color: rgb(59, 36, 20);
+    background-color: rgb(120, 78, 44);
+}
+
+.wh-tile {
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    border-width: 5px;
+    border-bottom-width: 14px;
+    border-color: rgb(59, 36, 20);
+    border-bottom-color: rgb(196, 156, 104);
+    background-color: rgb(255, 243, 214);
+    transition-property: scale;
+    transition-duration: 0.08s;
+}
+
+.wh-letter {
+    font-size: 112px;
+    color: rgb(92, 56, 30);
+    -unity-text-outline-width: 0;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.wh-tile-on {
+    scale: 1.06 1.06;
+    background-color: rgb(255, 255, 255);
+}
+
+.wh-state-new .wh-tile-on {
+    background-color: rgb(140, 214, 100);
+    border-bottom-color: rgb(80, 150, 60);
+}
+
+.wh-state-found .wh-tile-on {
+    background-color: rgb(255, 214, 64);
+    border-bottom-color: rgb(196, 140, 30);
+}
+
+.wh-trail {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.wordhunt-right {
+    width: 420px;
+}
+
+.wordhunt-ottie {
+    width: 400px;
+    height: 400px;
+    background-size: contain;
+}
+
+.wordhunt-points {
+    font-size: 56px;
+    color: rgb(255, 214, 64);
+    margin: 10px 0 24px 0;
+}
+
+.wordhunt-hint {
+    width: 380px;
+    font-size: 38px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    color: rgb(255, 236, 170);
+}
+
+.wordhunt-result {
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(24, 16, 12, 0.55);
+    display: none;
+}
+
+.wordhunt-result-text {
+    font-size: 140px;
+    color: rgb(255, 214, 64);
+    -unity-text-outline-width: 6px;
+}

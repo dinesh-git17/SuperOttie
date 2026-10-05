@@ -20,6 +20,8 @@ namespace SuperOttie.UI
             None,
             Title,
             Courses,
+            OutOfLives,
+            WordHunt,
             Intro,
             Playing,
             Paused,
@@ -28,7 +30,7 @@ namespace SuperOttie.UI
         }
 
         readonly VisualElement _root, _hud, _controls, _banner, _fade;
-        readonly VisualElement _title, _courses, _intro, _pause, _gameOver, _victory;
+        readonly VisualElement _title, _courses, _outOfLives, _wordHunt, _intro, _pause, _gameOver, _victory;
         readonly VisualElement _stick, _stickKnob, _btnJump, _btnPause;
         readonly Label _lives, _coins, _score, _world, _time;
         readonly Label _introWorld, _introName, _introLives;
@@ -53,6 +55,7 @@ namespace SuperOttie.UI
 
         public Screen Current { get; private set; } = Screen.None;
         public MenuView Menu { get; }
+        public WordHuntView WordHunt { get; }
         public TouchZones Zones => _zones;
         public bool IsFadeComplete => Mathf.Approximately(_fadeValue, _fadeTarget);
 
@@ -68,6 +71,8 @@ namespace SuperOttie.UI
             _fade = Q("fade");
             _title = Q("title");
             _courses = Q("courses");
+            _outOfLives = Q("outoflives");
+            _wordHunt = Q("wordhunt");
             _intro = Q("intro");
             _pause = Q("pause");
             _gameOver = Q("gameover");
@@ -109,6 +114,7 @@ namespace SuperOttie.UI
             _taps.Add((Q("pause-quit"), Screen.Paused, () => QuitRequested?.Invoke()));
             _root.Query(className: "safe-area").ForEach(e => _safeAreas.Add(e));
             Menu = new MenuView(_root, assets, (element, screen, action) => _taps.Add((element, screen, action)));
+            WordHunt = new WordHuntView(_root, assets);
 
             Show(Screen.None);
         }
@@ -133,6 +139,8 @@ namespace SuperOttie.UI
             if (screen != Screen.Playing) _zones.Release();
             SetVisible(_title, screen == Screen.Title);
             SetVisible(_courses, screen == Screen.Courses);
+            SetVisible(_outOfLives, screen == Screen.OutOfLives);
+            SetVisible(_wordHunt, screen == Screen.WordHunt);
             SetVisible(_intro, screen == Screen.Intro);
             SetVisible(_pause, screen == Screen.Paused);
             SetVisible(_gameOver, screen == Screen.GameOver);
@@ -299,7 +307,8 @@ namespace SuperOttie.UI
             }
         }
 
-        Vector2 ScreenToPanel(Vector2 screen)
+        /// <summary>Screen pixels (bottom-left origin) to panel coordinates (top-left origin, reference pixels).</summary>
+        public Vector2 ScreenToPanel(Vector2 screen)
         {
             float s = PanelScale;
             return new Vector2(screen.x / s, (UnityEngine.Screen.height - screen.y) / s);

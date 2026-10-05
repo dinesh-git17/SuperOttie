@@ -13,6 +13,11 @@
 
 Synthesised procedurally for this game (`Tools/ArtPipeline/sfx.py`).
 
+## Word list
+
+**ENABLE** (Enhanced North American Benchmark Lexicon), public domain, via https://github.com/dolph/dictionary.
+Filtered for Word Hunt by `Tools/WordList/make_wordlist.py`.
+
 ## Font
 
 **Lilita One** by Juan Montoreano. SIL Open Font License 1.1 (`Assets/Fonts/OFL.txt`).

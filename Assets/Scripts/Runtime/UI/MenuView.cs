@@ -9,7 +9,8 @@ using UnityEngine.UIElements;
 namespace SuperOttie.UI
 {
     /// <summary>
-    /// The main menu (New Game, Courses, sound) and the course select grid. Touch goes through the taps
+    /// The main menu (New Game, Courses, sound), the course select grid and the out-of-lives choice
+    /// (Word Hunt or main menu). Touch goes through the taps
     /// <see cref="GameUI"/> routes; keyboard and gamepad go through <see cref="Handle"/>.
     /// </summary>
     public sealed class MenuView
@@ -30,14 +31,16 @@ namespace SuperOttie.UI
         public const int GridColumns = 3;
 
         const int TitleNew = 0, TitleCourses = 1, TitleSound = 2;
+        const int OfferPlay = 0, OfferMenu = 1;
         const float ShakeSeconds = 0.35f;
 
         readonly GameAssets _assets;
         readonly Action<VisualElement, GameUI.Screen, Action> _registerTap;
-        readonly VisualElement[] _titleItems;
-        readonly VisualElement _logo, _newButton, _soundIcon, _grid;
-        readonly Label _best, _coursesCount, _tally, _hint;
+        readonly VisualElement[] _titleItems, _offerItems;
+        readonly VisualElement _logo, _newButton, _soundIcon, _grid, _offerArt;
+        readonly Label _best, _coursesCount, _tally, _hint, _offerScore;
         readonly MenuFocus _titleFocus = new MenuFocus(3);
+        readonly MenuFocus _offerFocus = new MenuFocus(2);
         readonly List<VisualElement> _cards = new List<VisualElement>();
         MenuFocus _courseFocus = new MenuFocus(1, GridColumns);
         CourseProgress _progress;
@@ -50,6 +53,8 @@ namespace SuperOttie.UI
         public event Action SoundToggleRequested;
         public event Action<int> CourseRequested;
         public event Action LockedCourseChosen;
+        public event Action WordHuntRequested;
+        public event Action OfferMenuRequested;
 
         public MenuView(VisualElement root, GameAssets assets, Action<VisualElement, GameUI.Screen, Action> registerTap)
         {
@@ -74,6 +79,13 @@ namespace SuperOttie.UI
             SetImage(Q(root, "courses-back-icon"), assets.iconBack);
             SetImage(Q(root, "courses-tally-icon"), assets.iconStar);
             Q(root, "title-scrim").style.backgroundImage = new StyleBackground(MakeScrim());
+
+            _offerItems = new[] { Q(root, "offer-play"), Q(root, "offer-menu") };
+            _offerScore = root.Q<Label>("offer-score");
+            _offerArt = Q(root, "outoflives-art");
+            SetImage(Q(root, "offer-ottie"), assets.playerHurt);
+            registerTap(_offerItems[OfferPlay], GameUI.Screen.OutOfLives, () => ActivateOffer(OfferPlay));
+            registerTap(_offerItems[OfferMenu], GameUI.Screen.OutOfLives, () => ActivateOffer(OfferMenu));
 
             registerTap(_newButton, GameUI.Screen.Title, () => Activate(TitleNew));
             registerTap(courses, GameUI.Screen.Title, () => Activate(TitleCourses));
@@ -165,6 +177,15 @@ namespace SuperOttie.UI
             ApplyFocus();
         }
 
+        /// <summary>The out-of-lives choice over the course's backdrop. Word Hunt is the default (Enter / A plays it).</summary>
+        public void ShowOutOfLives(int score, Sprite backdrop)
+        {
+            SetImage(_offerArt, backdrop != null ? backdrop : _assets.titleArt);
+            _offerScore.text = $"Score {score:000000}";
+            _offerFocus.Reset(OfferPlay);
+            ApplyFocus();
+        }
+
         public void SetSoundIcon(bool muted) => SetImage(_soundIcon, muted ? _assets.iconSoundOff : _assets.iconSoundOn);
 
         /// <summary>Keyboard / gamepad input on a menu screen. Returns true when it moved or pressed something.</summary>
@@ -174,6 +195,7 @@ namespace SuperOttie.UI
             {
                 GameUI.Screen.Title => HandleTitle(command),
                 GameUI.Screen.Courses => HandleCourses(command),
+                GameUI.Screen.OutOfLives => HandleOffer(command),
                 _ => false,
             };
             ApplyFocus();
@@ -211,6 +233,25 @@ namespace SuperOttie.UI
             }
         }
 
+        bool HandleOffer(MenuCommand command)
+        {
+            switch (command)
+            {
+                case MenuCommand.Up: return _offerFocus.Move(0, -1);
+                case MenuCommand.Down: return _offerFocus.Move(0, 1);
+                case MenuCommand.Submit:
+                    ActivateOffer(_offerFocus.Index);
+                    return true;
+                default: return false; // no Back shortcut: one stray Esc shouldn't end the run
+            }
+        }
+
+        void ActivateOffer(int item)
+        {
+            if (item == OfferPlay) WordHuntRequested?.Invoke();
+            else OfferMenuRequested?.Invoke();
+        }
+
         /// <summary>A tap hides the highlight but leaves its position, so Enter still means New Game afterwards.</summary>
         void Activate(int item, bool fromKeyboard = false)
         {
@@ -244,6 +285,8 @@ namespace SuperOttie.UI
                 _titleItems[i].EnableInClassList("menu-focused", _titleFocus.Visible && _titleFocus.Index == i);
             for (int i = 0; i < _cards.Count; i++)
                 _cards[i].EnableInClassList("menu-focused", _courseFocus.Visible && _courseFocus.Index == i);
+            for (int i = 0; i < _offerItems.Length; i++)
+                _offerItems[i].EnableInClassList("menu-focused", _offerFocus.Visible && _offerFocus.Index == i);
         }
 
         /// <summary>Idle motion: the logo bobs, New Game breathes, and a locked card shakes when picked.</summary>
