@@ -274,6 +274,16 @@ def app_icon():
     img.save(path)
 
 
+def menu_icons():
+    """Padlock, star, sound on/off and back arrow for the menus. The padlock's shackle encloses a white hole."""
+    parts = cutout_sheet("menu_icons", 5, holes=1500, merge_px=1)
+    names = ["icon_lock", "icon_star", "icon_sound_on", "icon_sound_off", "icon_back"]
+    icons = [ak.resize(p, 192 / max(p.shape[:2])) for p in parts]
+    for img, name in zip(icons, names):
+        save(img, f"UI/{name}.png")
+    checker_preview("menu_icons", icons)
+
+
 STEPS = {
     "player_sheet": player_sheet,
     "enemies_sheet": enemies_sheet,
@@ -295,6 +305,7 @@ STEPS = {
     "title_art": title_art,
     "logo": logo,
     "app_icon": app_icon,
+    "menu_icons": menu_icons,
 }
 
 if __name__ == "__main__":

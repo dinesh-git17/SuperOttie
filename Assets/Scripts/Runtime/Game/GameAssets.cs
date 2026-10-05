@@ -93,6 +93,11 @@ namespace SuperOttie.Game
         public Sprite stickKnob;
         public Sprite buttonJump;
         public Sprite buttonPause;
+        public Sprite iconLock;
+        public Sprite iconStar;
+        public Sprite iconSoundOn;
+        public Sprite iconSoundOff;
+        public Sprite iconBack;
 
         [Header("Music")]
         public AudioClip musicTitle;

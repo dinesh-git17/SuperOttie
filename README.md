@@ -9,6 +9,9 @@ starring Ottie, a chubby baby otter with round glasses. Built with Unity 6 (6000
 - `?` blocks with coins and the golden fish power-up (big Ottie breaks bricks and survives one hit)
 - Coins (100 = extra life), stomp chains, flagpole height bonus, time bonus, saved best score
 - Multi-touch thumbstick and jump button laid out inside the device safe area; keyboard/gamepad also work
+- Main menu with **New Game** and **Courses**: clearing a course unlocks the next one, and any unlocked course can be
+  started from the course select (a fresh run with full lives that carries on through the later courses).
+  Progress is saved on the device (`PlayerPrefs`, key `superottie.cleared`)
 
 ## Controls
 
@@ -17,6 +20,7 @@ starring Ottie, a chubby baby otter with round glasses. Built with Unity 6 (6000
 | Move | thumbstick (keep your thumb down and slide left/right) | arrows / A D | stick / d-pad |
 | Jump (hold for higher) | jump button | Space / Up / W / Z | A |
 | Pause | pause button | Esc / P | Start |
+| Menus | tap a button or course card | arrows / WASD, Enter or Space, Esc to go back | d-pad / stick, A, B to go back |
 
 ## Build and run on the iOS Simulator
 
@@ -34,9 +38,16 @@ For a real device, run `Super Ottie > Build > iOS Device Xcode Project` in the e
 ## Tests
 
 ```bash
-./run_tests.sh EditMode   # rules, parser, level lint, movement model, touch zones, camera math
+./run_tests.sh EditMode   # rules, parser, level lint, movement model, touch zones, camera math,
+                          # course unlocks, menu focus
 ./run_tests.sh PlayMode   # real physics: jumping, blocks, power-ups, stomps, pits, goal, scene flow,
                           # plus an autopilot that must finish every shipped course
+```
+
+Visual QA captures (explicit, so they don't run by default) render into `Logs/Screenshots`:
+
+```bash
+/Applications/Unity/Hub/Editor/6000.6.3f1/Unity.app/Contents/MacOS/Unity -batchmode -projectPath . -runTests -testPlatform PlayMode -testFilter MenuScreenshotCapture -testResults Logs/shots.xml -logFile Logs/shots.log
 ```
 
 ## Project layout
@@ -44,14 +55,14 @@ For a real device, run `Super Ottie > Build > iOS Device Xcode Project` in the e
 ```
 Assets/
   Scripts/Runtime/
-    Core/      GameSession, StompChain, LevelTimer, layers   (pure C#, unit tested)
+    Core/      GameSession, CourseProgress, StompChain, LevelTimer, layers   (pure C#, unit tested)
     Level/     LevelParser, LevelData, LevelLint, LevelBuilder, LevelContext
     Player/    PlatformerMotor (pure movement model), PlayerController, PlayerVisual
     Entities/  blocks, coins, fish power-up, enemies, flagpole, checkpoint, effects
     Input/     DeviceInput (touch + keyboard + gamepad), TouchZones (thumbstick + jump)
     View/      PlatformerCamera, ParallaxBackground
     Audio/     AudioManager
-    UI/        GameUI (UI Toolkit: Game.uxml / Game.uss)
+    UI/        GameUI (UI Toolkit: Game.uxml / Game.uss), MenuView (main menu + course select), MenuFocus
     Game/      GameManager (state machine), GameAssets catalogue, RuntimeSettings
   Scripts/Editor/  ProjectSetup (layers, player settings, assets, scene), BuildScript, import rules
   Levels/     level1-6.txt, plain-text maps (legend in LevelParser.cs)
@@ -75,8 +86,10 @@ Design notes:
 ## Art pipeline
 
 All characters, props, tiles, backgrounds, the title art, logo and app icon were generated with
-ChatGPT Images from the prompts in `Tools/ArtPipeline/PROMPTS.md` (via ChatGPT web, since the Codex
-CLI route in `gen.sh` was down at the time); the raw outputs are kept in `Tools/ArtPipeline/raw/`.
+ChatGPT Images from the prompts in `Tools/ArtPipeline/PROMPTS.md` and `Tools/ArtPipeline/prompts/` (the first set via
+ChatGPT web, later sets through the Codex CLI with `gen.sh <name>`, which uses `gpt-6-sol` unless `CODEX_MODEL` says
+otherwise); the raw outputs are kept in `Tools/ArtPipeline/raw/`. Process them with
+`Tools/ArtPipeline/.venv/bin/python process.py <name>` (create the venv with numpy, scipy and pillow).
 The generator can't output transparency, so each asset is drawn on flat white and `process.py` cuts it
 out: flood-fill of the white backdrop from the borders, alpha un-mixing of the anti-aliased fringe,
 slicing sheets into frames by connected components, uniform scaling and bottom-centre pivots, and

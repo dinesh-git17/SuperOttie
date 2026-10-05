@@ -11,6 +11,18 @@ namespace SuperOttie.Input
         public bool JumpPressed;
     }
 
+    /// <summary>One menu action from a keyboard or gamepad (touch menus are tapped directly).</summary>
+    public enum MenuCommand
+    {
+        None,
+        Up,
+        Down,
+        Left,
+        Right,
+        Submit,
+        Back,
+    }
+
     public interface IPlayerInput
     {
         /// <summary>Called once per rendered frame by the player.</summary>

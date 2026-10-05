@@ -113,6 +113,7 @@ InitTestScene*.unity*
 
 # Art pipeline scratch
 Tools/ArtPipeline/__pycache__/
+Tools/ArtPipeline/.venv/
 Tools/ArtPipeline/previews/
 Tools/ArtPipeline/logs/
 Tools/__pycache__/

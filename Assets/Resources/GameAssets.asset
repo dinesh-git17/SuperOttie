@@ -124,6 +124,11 @@ MonoBehaviour:
   stickKnob: {fileID: 21300000, guid: e2fe188d73df8429cba1a5ddfecd5e63, type: 3}
   buttonJump: {fileID: 21300000, guid: 66634a262c8d6487d9b5ffbb852c51fb, type: 3}
   buttonPause: {fileID: 21300000, guid: 8806db564444e4c29be7d4874fbecc62, type: 3}
+  iconLock: {fileID: 21300000, guid: 5c386cf9706d24c88b29bc6cbed20345, type: 3}
+  iconStar: {fileID: 21300000, guid: cba686de3c29b4e73814c185790c97cf, type: 3}
+  iconSoundOn: {fileID: 21300000, guid: aff8abc002c02420eab2ac5f5351cc66, type: 3}
+  iconSoundOff: {fileID: 21300000, guid: a105b9ca05d884c0d8ca7006a55263cb, type: 3}
+  iconBack: {fileID: 21300000, guid: 8fbcd5998e3c7432db3ce3e2cc15c5e1, type: 3}
   musicTitle: {fileID: 8300000, guid: 682d3b1d3f7794d3380b56a78cd36751, type: 3}
   musicEnding: {fileID: 8300000, guid: 88ad93477381c4597b72c805274aa385, type: 3}
   jingleLevelClear: {fileID: 8300000, guid: 961ee5e590eb2498fa1f17db725cb8bd, type: 3}

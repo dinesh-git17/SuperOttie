@@ -9,7 +9,7 @@ namespace SuperOttie.Input
 {
     /// <summary>
     /// Merges the touch stick and jump button, keyboard and gamepad into one <see cref="IPlayerInput"/>, and exposes
-    /// menu-level signals (taps, pause, confirm).
+    /// menu-level signals (taps, pause, confirm, menu navigation).
     /// </summary>
     public sealed class DeviceInput : IPlayerInput
     {
@@ -83,6 +83,33 @@ namespace SuperOttie.Input
             if (kb != null && (kb.enterKey.wasPressedThisFrame || kb.spaceKey.wasPressedThisFrame || kb.numpadEnterKey.wasPressedThisFrame)) return true;
             var pad = Gamepad.current;
             return pad != null && (pad.buttonSouth.wasPressedThisFrame || pad.startButton.wasPressedThisFrame);
+        }
+
+        /// <summary>The menu action pressed this frame: arrows/WASD or d-pad/stick, Enter/Space or A/Start, Esc or B.</summary>
+        public MenuCommand ReadMenuCommand()
+        {
+            var kb = Keyboard.current;
+            if (kb != null)
+            {
+                if (kb.upArrowKey.wasPressedThisFrame || kb.wKey.wasPressedThisFrame) return MenuCommand.Up;
+                if (kb.downArrowKey.wasPressedThisFrame || kb.sKey.wasPressedThisFrame) return MenuCommand.Down;
+                if (kb.leftArrowKey.wasPressedThisFrame || kb.aKey.wasPressedThisFrame) return MenuCommand.Left;
+                if (kb.rightArrowKey.wasPressedThisFrame || kb.dKey.wasPressedThisFrame) return MenuCommand.Right;
+                if (kb.enterKey.wasPressedThisFrame || kb.numpadEnterKey.wasPressedThisFrame || kb.spaceKey.wasPressedThisFrame) return MenuCommand.Submit;
+                if (kb.escapeKey.wasPressedThisFrame || kb.backspaceKey.wasPressedThisFrame) return MenuCommand.Back;
+            }
+
+            var pad = Gamepad.current;
+            if (pad != null)
+            {
+                if (pad.dpad.up.wasPressedThisFrame || pad.leftStick.up.wasPressedThisFrame) return MenuCommand.Up;
+                if (pad.dpad.down.wasPressedThisFrame || pad.leftStick.down.wasPressedThisFrame) return MenuCommand.Down;
+                if (pad.dpad.left.wasPressedThisFrame || pad.leftStick.left.wasPressedThisFrame) return MenuCommand.Left;
+                if (pad.dpad.right.wasPressedThisFrame || pad.leftStick.right.wasPressedThisFrame) return MenuCommand.Right;
+                if (pad.buttonSouth.wasPressedThisFrame || pad.startButton.wasPressedThisFrame) return MenuCommand.Submit;
+                if (pad.buttonEast.wasPressedThisFrame) return MenuCommand.Back;
+            }
+            return MenuCommand.None;
         }
 
         public bool PauseKeyPressed()

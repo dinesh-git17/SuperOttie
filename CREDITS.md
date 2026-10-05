@@ -20,5 +20,5 @@ Synthesised procedurally for this game (`Tools/ArtPipeline/sfx.py`).
 ## Art
 
 Generated with ChatGPT Images (ChatGPT web for the first set, the Codex CLI for the autumn, snow and cave
-backdrops, tiles and scenery), based on the Ottie reference character, then processed with
+backdrops, tiles and scenery, and the menu icons), based on the Ottie reference character, then processed with
 `Tools/ArtPipeline/process.py`. Touch controls (thumbstick, jump, pause) are drawn by `ui_icons.py`.

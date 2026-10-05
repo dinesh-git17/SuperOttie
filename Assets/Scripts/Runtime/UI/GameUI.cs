@@ -19,6 +19,7 @@ namespace SuperOttie.UI
         {
             None,
             Title,
+            Courses,
             Intro,
             Playing,
             Paused,
@@ -26,14 +27,15 @@ namespace SuperOttie.UI
             Victory,
         }
 
-        readonly VisualElement _root, _safe, _hud, _controls, _banner, _fade;
-        readonly VisualElement _title, _intro, _pause, _gameOver, _victory;
+        readonly VisualElement _root, _hud, _controls, _banner, _fade;
+        readonly VisualElement _title, _courses, _intro, _pause, _gameOver, _victory;
         readonly VisualElement _stick, _stickKnob, _btnJump, _btnPause;
         readonly Label _lives, _coins, _score, _world, _time;
-        readonly Label _introWorld, _introName, _introLives, _titlePrompt, _titleBest;
+        readonly Label _introWorld, _introName, _introLives;
         readonly Label _gameOverScore, _victoryScore, _victoryBest, _bannerText, _pauseSound;
         readonly List<Label> _blinking = new List<Label>();
         readonly List<(VisualElement element, Screen screen, Action action)> _taps = new List<(VisualElement, Screen, Action)>();
+        readonly List<VisualElement> _safeAreas = new List<VisualElement>();
         readonly TouchZones _zones;
         readonly List<(Label label, float age)> _popups = new List<(Label, float)>();
         const float PopupLifetime = 0.9f;
@@ -50,6 +52,7 @@ namespace SuperOttie.UI
         public event Action SoundToggleRequested;
 
         public Screen Current { get; private set; } = Screen.None;
+        public MenuView Menu { get; }
         public TouchZones Zones => _zones;
         public bool IsFadeComplete => Mathf.Approximately(_fadeValue, _fadeTarget);
 
@@ -59,12 +62,12 @@ namespace SuperOttie.UI
             _root = documentRoot.Q("root") ?? documentRoot;
             if (assets.font != null) _root.style.unityFontDefinition = FontDefinition.FromFont(assets.font);
 
-            _safe = Q("safe");
             _hud = Q("hud");
             _controls = Q("controls");
             _banner = Q("banner");
             _fade = Q("fade");
             _title = Q("title");
+            _courses = Q("courses");
             _intro = Q("intro");
             _pause = Q("pause");
             _gameOver = Q("gameover");
@@ -82,8 +85,6 @@ namespace SuperOttie.UI
             _introWorld = L("intro-world");
             _introName = L("intro-name");
             _introLives = L("intro-lives");
-            _titlePrompt = L("title-prompt");
-            _titleBest = L("title-best");
             _gameOverScore = L("gameover-score");
             _victoryScore = L("victory-score");
             _victoryBest = L("victory-best");
@@ -97,11 +98,8 @@ namespace SuperOttie.UI
             SetImage(Q("hud-life-icon"), assets.iconLife);
             SetImage(Q("intro-life-icon"), assets.iconLife);
             SetImage(Q("hud-coin-icon"), assets.coin);
-            SetImage(Q("title-art"), assets.titleArt);
-            SetImage(Q("title-logo"), assets.logo);
             SetImage(Q("victory-ottie"), assets.playerWin);
 
-            _blinking.Add(_titlePrompt);
             _root.Query<Label>(className: "blink").ForEach(l => _blinking.Add(l));
 
             _taps.Add((_btnPause, Screen.Playing, () => PauseRequested?.Invoke()));
@@ -109,6 +107,8 @@ namespace SuperOttie.UI
             _taps.Add((Q("pause-restart"), Screen.Paused, () => RestartRequested?.Invoke()));
             _taps.Add((_pauseSound, Screen.Paused, () => SoundToggleRequested?.Invoke()));
             _taps.Add((Q("pause-quit"), Screen.Paused, () => QuitRequested?.Invoke()));
+            _root.Query(className: "safe-area").ForEach(e => _safeAreas.Add(e));
+            Menu = new MenuView(_root, assets, (element, screen, action) => _taps.Add((element, screen, action)));
 
             Show(Screen.None);
         }
@@ -132,6 +132,7 @@ namespace SuperOttie.UI
             SetVisible(_controls, screen == Screen.Playing);
             if (screen != Screen.Playing) _zones.Release();
             SetVisible(_title, screen == Screen.Title);
+            SetVisible(_courses, screen == Screen.Courses);
             SetVisible(_intro, screen == Screen.Intro);
             SetVisible(_pause, screen == Screen.Paused);
             SetVisible(_gameOver, screen == Screen.GameOver);
@@ -142,8 +143,6 @@ namespace SuperOttie.UI
                 ClearPopups();
             }
         }
-
-        public void SetTitle(int bestScore) => _titleBest.text = $"Best {bestScore:000000}";
 
         public void SetIntro(int levelNumber, string levelName, int lives)
         {
@@ -175,7 +174,11 @@ namespace SuperOttie.UI
             _victoryBest.text = $"Best {best:000000}";
         }
 
-        public void SetSoundLabel(bool muted) => _pauseSound.text = muted ? "Sound: Off" : "Sound: On";
+        public void SetSoundLabel(bool muted)
+        {
+            _pauseSound.text = muted ? "Sound: Off" : "Sound: On";
+            Menu.SetSoundIcon(muted);
+        }
 
         public void ShowBanner(string text, float seconds)
         {
@@ -262,6 +265,7 @@ namespace SuperOttie.UI
                 if (_bannerTime <= 0f) HideBanner();
             }
 
+            Menu.Tick(unscaledDt, Current);
             TickPopups(unscaledDt);
             _fadeValue = Mathf.MoveTowards(_fadeValue, _fadeTarget, unscaledDt * 3f);
             _fade.style.opacity = _fadeValue;
@@ -318,7 +322,7 @@ namespace SuperOttie.UI
             _zones.Jump = PanelToScreen(_btnJump.worldBound);
         }
 
-        /// <summary>Pads gameplay UI away from the Dynamic Island, rounded corners and home indicator.</summary>
+        /// <summary>Pads gameplay and menu UI away from the Dynamic Island, rounded corners and home indicator.</summary>
         void ApplySafeArea()
         {
             var safe = UnityEngine.Screen.safeArea;
@@ -327,10 +331,13 @@ namespace SuperOttie.UI
             if (!(w > 0f)) return; // layout not ready yet; try again next frame
             float s = UnityEngine.Screen.width / w;
             _appliedSafeArea = safe;
-            _safe.style.left = safe.xMin / s;
-            _safe.style.right = (UnityEngine.Screen.width - safe.xMax) / s;
-            _safe.style.top = (UnityEngine.Screen.height - safe.yMax) / s;
-            _safe.style.bottom = safe.yMin / s;
+            foreach (var e in _safeAreas)
+            {
+                e.style.left = safe.xMin / s;
+                e.style.right = (UnityEngine.Screen.width - safe.xMax) / s;
+                e.style.top = (UnityEngine.Screen.height - safe.yMax) / s;
+                e.style.bottom = safe.yMin / s;
+            }
         }
     }
 }

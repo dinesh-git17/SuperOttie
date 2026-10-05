@@ -3,7 +3,7 @@
     <ui:VisualElement name="root" class="root" picking-mode="Ignore">
 
         <!-- Gameplay layer: HUD + touch controls, padded to the device safe area. -->
-        <ui:VisualElement name="safe" class="fill" picking-mode="Ignore">
+        <ui:VisualElement name="safe" class="fill safe-area" picking-mode="Ignore">
             <ui:VisualElement name="hud" class="hud" picking-mode="Ignore">
                 <ui:VisualElement class="hud-group" picking-mode="Ignore">
                     <ui:VisualElement class="hud-item" picking-mode="Ignore">
@@ -35,11 +35,48 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
+        <!-- Main menu: key art on the right, logo and buttons in a column on the left. -->
         <ui:VisualElement name="title" class="screen" picking-mode="Ignore">
             <ui:VisualElement name="title-art" class="fill title-art" picking-mode="Ignore" />
-            <ui:VisualElement name="title-logo" class="title-logo" picking-mode="Ignore" />
-            <ui:Label name="title-prompt" text="Tap to start" class="title-prompt" picking-mode="Ignore" />
-            <ui:Label name="title-best" text="Best 000000" class="title-best" picking-mode="Ignore" />
+            <ui:VisualElement name="title-scrim" class="fill title-scrim" picking-mode="Ignore" />
+            <ui:VisualElement name="title-safe" class="fill safe-area" picking-mode="Ignore">
+                <ui:VisualElement class="title-column" picking-mode="Ignore">
+                    <ui:VisualElement name="title-logo" class="title-logo" picking-mode="Ignore" />
+                    <ui:VisualElement name="menu-new" class="menu-btn menu-btn-primary" picking-mode="Ignore">
+                        <ui:Label text="New Game" class="menu-btn-text" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="menu-courses" class="menu-btn menu-btn-secondary" picking-mode="Ignore">
+                        <ui:Label text="Courses" class="menu-btn-text" picking-mode="Ignore" />
+                        <ui:VisualElement class="menu-badge" picking-mode="Ignore">
+                            <ui:Label name="menu-courses-count" text="1/6" class="menu-badge-text" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label name="title-best" text="Best 000000" class="title-best" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="menu-sound" class="icon-btn menu-sound" picking-mode="Ignore">
+                    <ui:VisualElement name="menu-sound-icon" class="icon-btn-glyph" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Course select: one card per course, built in code from the level list. -->
+        <ui:VisualElement name="courses" class="screen" picking-mode="Ignore">
+            <ui:VisualElement name="courses-art" class="fill title-art" picking-mode="Ignore" />
+            <ui:VisualElement class="fill courses-dim" picking-mode="Ignore" />
+            <ui:VisualElement name="courses-safe" class="fill safe-area courses-layout" picking-mode="Ignore">
+                <ui:VisualElement class="courses-header" picking-mode="Ignore">
+                    <ui:VisualElement name="courses-back" class="icon-btn icon-btn-disc" picking-mode="Ignore">
+                        <ui:VisualElement name="courses-back-icon" class="icon-btn-glyph" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:Label text="Choose a Course" class="courses-title" picking-mode="Ignore" />
+                    <ui:VisualElement class="courses-tally" picking-mode="Ignore">
+                        <ui:VisualElement name="courses-tally-icon" class="courses-tally-icon" picking-mode="Ignore" />
+                        <ui:Label name="courses-tally" text="0/6" class="courses-tally-text" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="courses-grid" class="courses-grid" picking-mode="Ignore" />
+                <ui:Label name="courses-hint" text="Clear a course to open the next one" class="courses-hint" picking-mode="Ignore" />
+            </ui:VisualElement>
         </ui:VisualElement>
 
         <ui:VisualElement name="intro" class="screen screen-dark" picking-mode="Ignore">
@@ -57,7 +94,7 @@
                 <ui:Label name="pause-resume" text="Resume" class="menu-button" picking-mode="Ignore" />
                 <ui:Label name="pause-restart" text="Restart level" class="menu-button" picking-mode="Ignore" />
                 <ui:Label name="pause-sound" text="Sound: On" class="menu-button" picking-mode="Ignore" />
-                <ui:Label name="pause-quit" text="Quit to title" class="menu-button" picking-mode="Ignore" />
+                <ui:Label name="pause-quit" text="Main menu" class="menu-button" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
 

@@ -208,6 +208,11 @@ namespace SuperOttie.Editor
             a.stickKnob = S(Art + "UI/stick_knob.png");
             a.buttonJump = S(Art + "UI/btn_jump.png");
             a.buttonPause = S(Art + "UI/btn_pause.png");
+            a.iconLock = S(Art + "UI/icon_lock.png");
+            a.iconStar = S(Art + "UI/icon_star.png");
+            a.iconSoundOn = S(Art + "UI/icon_sound_on.png");
+            a.iconSoundOff = S(Art + "UI/icon_sound_off.png");
+            a.iconBack = S(Art + "UI/icon_back.png");
 
             a.musicTitle = Clip("Music/music_title.wav");
             a.musicEnding = Clip("Music/music_ending.wav");

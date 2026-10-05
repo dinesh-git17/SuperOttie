@@ -12,8 +12,8 @@ using UnityEngine.UIElements;
 namespace SuperOttie.Game
 {
     /// <summary>
-    /// Top-level game flow: title, level intro card, play, pause, death, course clear, game over and
-    /// the final victory screen. Owns the session, the current level and the UI.
+    /// Top-level game flow: main menu, course select, level intro card, play, pause, death, course clear,
+    /// game over and the final victory screen. Owns the session, saved progress, the current level and the UI.
     /// </summary>
     public sealed class GameManager : MonoBehaviour
     {
@@ -21,6 +21,7 @@ namespace SuperOttie.Game
         {
             Boot,
             Title,
+            Courses,
             Intro,
             Playing,
             Paused,
@@ -41,6 +42,7 @@ namespace SuperOttie.Game
         readonly GameSession _session = new GameSession();
         readonly TouchZones _zones = new TouchZones();
         readonly IHighScoreStore _highScores = new PlayerPrefsHighScoreStore();
+        readonly ICourseProgressStore _progressStore = new PlayerPrefsCourseProgressStore();
 
         LevelData[] _levels;
         DeviceInput _input;
@@ -56,11 +58,15 @@ namespace SuperOttie.Game
         public BuiltLevel Level => _level;
         public int LevelCount => _levels.Length;
 
+        /// <summary>Cleared and unlocked courses, saved whenever a course is cleared for the first time.</summary>
+        public CourseProgress Progress { get; private set; }
+
         void Awake()
         {
             RuntimeSettings.Apply();
             if (assets == null) assets = GameAssets.Load();
             _levels = assets.levels.Select(t => LevelParser.Parse(t.text)).ToArray();
+            Progress = new CourseProgress(_levels.Length, _progressStore.Load());
 
             audioManager.Init(assets);
             _input = new DeviceInput(_zones);
@@ -71,6 +77,15 @@ namespace SuperOttie.Game
             _ui.QuitRequested += QuitToTitle;
             _ui.SoundToggleRequested += ToggleSound;
             _ui.SetSoundLabel(audioManager.Muted);
+
+            var menu = _ui.Menu;
+            menu.SetCourses(_levels.Select(l => new MenuView.CourseInfo(l.Name, assets.GetTheme(l.Theme).background)).ToArray());
+            menu.NewGameRequested += StartNewGame;
+            menu.CoursesRequested += OpenCourses;
+            menu.CourseRequested += StartCourse;
+            menu.BackRequested += BackToMenu;
+            menu.SoundToggleRequested += ToggleSound;
+            menu.LockedCourseChosen += () => audioManager.Play(Sfx.Bump);
             _session.ExtraLife += () => audioManager.Play(Sfx.OneUp);
         }
 
@@ -80,20 +95,17 @@ namespace SuperOttie.Game
         {
             _ui.Tick(Time.unscaledDeltaTime, Current == Phase.Playing ? _input.CurrentTouchButtons : default);
 
-            bool tapConsumed = false;
             foreach (var tap in _input.TapsThisFrame)
             {
-                if (_ui.HandleTap(tap))
-                {
-                    tapConsumed = true;
-                    audioManager.Play(Sfx.UiTap);
-                }
+                if (_ui.HandleTap(tap)) audioManager.Play(Sfx.UiTap);
             }
 
             switch (Current)
             {
                 case Phase.Title:
-                    if (!tapConsumed && _input.ConfirmPressed()) StartNewGame();
+                case Phase.Courses:
+                    var command = _input.ReadMenuCommand();
+                    if (command != MenuCommand.None && _ui.Menu.Handle(_ui.Current, command)) audioManager.Play(Sfx.UiTap);
                     break;
                 case Phase.Playing:
                     if (_input.PauseKeyPressed())
@@ -118,10 +130,36 @@ namespace SuperOttie.Game
 
         // ---------------------------------------------------------------- flow
 
-        public void StartNewGame()
+        public void StartNewGame() => StartCourse(0);
+
+        /// <summary>Starts a fresh run (full lives, zero score) at an unlocked course; later courses follow as usual.</summary>
+        public void StartCourse(int index)
         {
+            if (!Progress.IsUnlocked(index)) return;
             _session.Reset();
-            RunFlow(LevelIntro(0));
+            RunFlow(LevelIntro(index));
+        }
+
+        public void OpenCourses()
+        {
+            if (Current != Phase.Title) return;
+            Current = Phase.Courses;
+            _ui.Menu.ShowCourses(Progress);
+            _ui.Show(GameUI.Screen.Courses);
+        }
+
+        /// <summary>Course select back to the main menu, keeping the music going.</summary>
+        void BackToMenu()
+        {
+            if (Current != Phase.Courses) return;
+            ShowMenu(focusCourses: true);
+        }
+
+        void ShowMenu(bool focusCourses = false)
+        {
+            Current = Phase.Title;
+            _ui.Menu.ShowTitle(_highScores.Load(), Progress, focusCourses);
+            _ui.Show(GameUI.Screen.Title);
         }
 
         void RunFlow(IEnumerator routine)
@@ -136,9 +174,7 @@ namespace SuperOttie.Game
             _flow = null;
             Time.timeScale = 1f;
             CleanupLevel();
-            Current = Phase.Title;
-            _ui.SetTitle(_highScores.Load());
-            _ui.Show(GameUI.Screen.Title);
+            ShowMenu();
             _ui.SetFadeImmediate(0f);
             audioManager.PlayMusic(assets.musicTitle);
         }
@@ -214,6 +250,7 @@ namespace SuperOttie.Game
         void OnGoalReached(int flagScore)
         {
             Current = Phase.LevelClear;
+            if (Progress.MarkCleared(_session.LevelIndex)) _progressStore.Save(Progress.ClearedMask);
             audioManager.StopMusic();
         }
 
